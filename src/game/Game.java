@@ -11,20 +11,33 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class Game extends JFrame implements Runnable {
-    static Window w = new Window();
     static final int XBORDER = 20;
     static final int YBORDER = 20;
     static final int YTITLE = 30;
     static final int WINDOW_BORDER = 8;
-    static final int WINDOW_WIDTH = 2*(WINDOW_BORDER + XBORDER) + 495;
-    static final int WINDOW_HEIGHT = YTITLE + WINDOW_BORDER + 2 * YBORDER + 525;
+    static final int WINDOW_WIDTH = 2*(WINDOW_BORDER + XBORDER) + (495 * 2);
+    static final int WINDOW_HEIGHT = YTITLE + WINDOW_BORDER + 2 * YBORDER + (460 * 2);
     boolean animateFirstTime = true;
     int xsize = -1;
     int ysize = -1;
     Image image;
     Graphics2D g;
-    Image sorryBackground;
     
+    final int numRows = 20;
+    final int numColumns = 20;
+
+    int board[][];
+
+    int currentRow;
+    int currentColumn;
+
+    int columnDir;
+    int rowDir;
+    
+    boolean gameOver;
+    
+    int timeCount;
+    int timeSpeedVal;
     
     static Game frame1;
     static GUI gui;
@@ -127,8 +140,8 @@ public class Game extends JFrame implements Runnable {
 
         g.fillRect(0, 0, xsize, ysize);
 
-        int x[] = {w.getX(0), w.getX(w.getWidth2()), w.getX(w.getWidth2()), w.getX(0), w.getX(0)};
-        int y[] = {w.getY(0), w.getY(0), w.getY(w.getHeight2()), w.getY(w.getHeight2()), w.getY(0)};
+        int x[] = {getX(0), getX(getWidth2()), getX(getWidth2()), getX(0), getX(0)};
+        int y[] = {getY(0), getY(0), getY(getHeight2()), getY(getHeight2()), getY(0)};
 //fill border
         g.setColor(Color.white);
         g.fillPolygon(x, y, 4);
@@ -141,22 +154,23 @@ public class Game extends JFrame implements Runnable {
             return;
         }
 
-        g.setColor(Color.red);
+        g.setColor(Color.black);
+//horizontal lines
+        for (int zi=1;zi<numRows;zi++)
+        {
+            g.drawLine(getX(0) ,getY(0)+zi*getHeight2()/numRows ,
+            getX(getWidth2()) ,getY(0)+zi*getHeight2()/numRows );
+        }
+//vertical lines
+        for (int zi=1;zi<numColumns;zi++)
+        {
+            g.drawLine(getX(0)+zi*getWidth2()/numColumns ,getY(0) ,
+            getX(0)+zi*getWidth2()/numColumns,getY(getHeight2())  );
+        }
 
-        
-        drawBackground(g,w,sorryBackground,w.getWidth2(),w.getHeight2());
- 
+
  
       gOld.drawImage(image, 0, 0, null);
-    }
-    public void drawBackground(Graphics2D g,Window w , Image image,
-    int width,int height)
-    {
-        g.translate(w.getX(0),w.getYNormal(0));
-        g.scale(.05,.05);
-        g.drawImage(image, -width/2, -height/2,width,height,this);
-        g.scale(20,20);
-        g.translate(-w.getX(0),-w.getYNormal(0));
     }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -186,7 +200,6 @@ public class Game extends JFrame implements Runnable {
                 ysize = getSize().height;
             }
             reset();
-            sorryBackground = Toolkit.getDefaultToolkit().getImage("./sorryBackground.PNG");
         }
 
         
@@ -207,36 +220,25 @@ public class Game extends JFrame implements Runnable {
         relaxer = null;
     }
 /////////////////////////////////////////////////////////////////////////
-  
-    
-}
-class Window {
-    int xsize = -1;
-    int ysize = -1;
-    
-    static final int WINDOW_WIDTH = 412;
-    static final int WINDOW_HEIGHT = 451;
+      public int getX(int x) {
+        return (x + XBORDER + WINDOW_BORDER);
+    }
 
-    final int TOP_BORDER = 40;
-    final int SIDE_BORDER = 8;
-    final int BOTTOM_BORDER = 8;
-    final int YTITLE = 25;
-    
-    public int getX(int x) {
-        return (x+SIDE_BORDER);
-    }
     public int getY(int y) {
-        return (y + TOP_BORDER + YTITLE);
+        return (y + YBORDER + YTITLE );
+    }
+
+    public int getYNormal(int y) {
+        return (-y + YBORDER + YTITLE + getHeight2());
     }
     
-    public int getYNormal(int y) {
-        return (-y + TOP_BORDER + YTITLE + getHeight2());
-    }
-        
     public int getWidth2() {
-        return (xsize - SIDE_BORDER*2);
+        return (xsize - 2 * (XBORDER + WINDOW_BORDER));
     }
+
     public int getHeight2() {
-        return (ysize - (TOP_BORDER + YTITLE) - BOTTOM_BORDER);
-    }    
+        return (ysize - 2 * YBORDER - WINDOW_BORDER - YTITLE);
+    }
+    
 }
+
