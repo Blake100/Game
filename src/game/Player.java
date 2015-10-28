@@ -3,6 +3,7 @@ package game;
 public class Player {
     private int numTurns;
     private int maxTurns = 16;
+    public Mob[] mobs = new Mob[game.Game.numMobs];
     
     Player()
     {

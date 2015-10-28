@@ -65,6 +65,7 @@ public class Mob {
     }
     public void draw(Graphics2D g,int xpos, int ypos,int width, int height)
     {
+        g.setColor(color);
         g.fillOval(xpos,ypos,width,height);
     }
   
