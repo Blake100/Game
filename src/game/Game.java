@@ -4,6 +4,7 @@
  */
 package game;
 
+import static game.Game.WINDOW_BORDER;
 import java.io.*;
 import java.awt.*;
 import java.awt.geom.*;
@@ -27,6 +28,10 @@ public class Game extends JFrame implements Runnable {
     final int numColumns = 20;
 
     int board[][];
+    
+    int numMobs = 3;
+    Mob[] mobs = new Mob[numMobs];
+    Player playerOne;
 
     int currentRow;
     int currentColumn;
@@ -63,9 +68,29 @@ public class Game extends JFrame implements Runnable {
             public void mousePressed(MouseEvent e) {
                 if (e.BUTTON1 == e.getButton()) {
                     //left button
+                    int xpos = e.getX() - getX(0);
+                    int ypos = e.getY() - getY(0);
+                    if (xpos < 0 || ypos < 0 || xpos > getWidth2() || ypos > getHeight2())
+                        return;
+                    int ydelta = getHeight2()/numRows;
+                    int xdelta = getWidth2()/numColumns;
+                    
+                    currentColumn = xpos/xdelta;
+                    currentRow = ypos/ydelta;
+                    
+                    for(int i = 0; i < numMobs;i++)
+                    {
+                        mobs[i].setSelected(false);
+                        if(mobs[i].getCurrColumn() == currentColumn && mobs[i].getCurrRow() == currentRow)
+                        {
+                            mobs[i].setSelected(true);
+                            mobs[i].setColor(Color.blue);
+                        }
+                    }
                 }
                 if (e.BUTTON3 == e.getButton()) {
-                    //right button
+                     //right button
+                
                     reset();
                 }
                 repaint();
@@ -89,15 +114,59 @@ public class Game extends JFrame implements Runnable {
             public void keyPressed(KeyEvent e) {
                 if (e.VK_RIGHT == e.getKeyCode())
                 {
+                    for(int i = 0; i < numMobs;i++)
+                    {
+                      if(mobs[i].isSelected())
+                      {
+                          if(playerOne.getNumTurns() >0)
+                          {
+                            mobs[i].setCurrColumn(mobs[i].getCurrColumn()+1);
+                            playerOne.setNumTurns(playerOne.getNumTurns()-1);
+                          }
+                      }
+                    }
                 }
                 if (e.VK_LEFT == e.getKeyCode())
                 {
+                        for(int i = 0; i < numMobs;i++)
+                        {
+                          if(mobs[i].isSelected())
+                          {
+                              if(playerOne.getNumTurns() >0)
+                                {
+                                   mobs[i].setCurrColumn(mobs[i].getCurrColumn()-1);
+                                   playerOne.setNumTurns(playerOne.getNumTurns()-1);
+                                }
+                          }
+                        }
                 }
                 if (e.VK_UP == e.getKeyCode())
                 {
+                     for(int i = 0; i < numMobs;i++)
+                        {
+                          if(mobs[i].isSelected())
+                          {
+                              if(playerOne.getNumTurns() >0)
+                                {
+                                    mobs[i].setCurrRow(mobs[i].getCurrRow()-1);
+                                    playerOne.setNumTurns(playerOne.getNumTurns()-1);
+                                }
+                          }
+                        }
                 }
                 if (e.VK_DOWN == e.getKeyCode())
                 {
+                     for(int i = 0; i < numMobs;i++)
+                        {
+                          if(mobs[i].isSelected())
+                          {
+                              if(playerOne.getNumTurns() >0)
+                                {
+                                    mobs[i].setCurrRow(mobs[i].getCurrRow()+1);
+                                    playerOne.setNumTurns(playerOne.getNumTurns()-1);
+                                }
+                          }
+                        }
                 }
                 if (e.VK_ESCAPE == e.getKeyCode())
                 {
@@ -168,6 +237,15 @@ public class Game extends JFrame implements Runnable {
             getX(0)+zi*getWidth2()/numColumns,getY(getHeight2())  );
         }
 
+                for(int i = 0; i < numMobs;i++)
+                {
+                    mobs[i].draw(g,getX(0)+mobs[i].getCurrColumn()*getWidth2()/numColumns,
+                    getY(0)+mobs[i].getCurrRow()*getHeight2()/numRows,
+                    getWidth2()/numColumns,
+                    getHeight2()/numRows);
+                }
+               
+                 g.drawString("Player 1 Turns Left : " + playerOne.getNumTurns(), 32, 50);  
 
  
       gOld.drawImage(image, 0, 0, null);
@@ -189,6 +267,18 @@ public class Game extends JFrame implements Runnable {
     }
 /////////////////////////////////////////////////////////////////////////
     public void reset() {
+        playerOne = new Player();
+
+        mobs[0] = new Mob(Color.black);
+        mobs[1] = new Mob(Color.black);
+        mobs[2] = new Mob(Color.black);
+       
+        mobs[0].setCurrColumn(12);
+        mobs[0].setCurrRow(0);
+        mobs[1].setCurrColumn(9);
+        mobs[1].setCurrRow(0);
+        mobs[2].setCurrColumn(6);
+        mobs[2].setCurrRow(0);
     }
 /////////////////////////////////////////////////////////////////////////
     public void animate() {
@@ -201,8 +291,9 @@ public class Game extends JFrame implements Runnable {
             }
             reset();
         }
-
         
+        
+      timeCount++;  
     }
 
 ////////////////////////////////////////////////////////////////////////////
