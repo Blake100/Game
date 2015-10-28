@@ -13,7 +13,7 @@ public class Mob {
         health = 2;
         Selected = false;
         dir=1;
-      
+        this.color = color;
     }
 
     public boolean isSelected() {

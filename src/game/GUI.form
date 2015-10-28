@@ -97,7 +97,7 @@
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\147003422\Desktop\CS2\Game\starwarsimage.jpg"/>
+          <Image iconType="3" name="/game/backgroundimageforgui/starwarsimage.jpg"/>
         </Property>
         <Property name="text" type="java.lang.String" value="jLabel1"/>
       </Properties>

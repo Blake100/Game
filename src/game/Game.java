@@ -22,6 +22,7 @@ public class Game extends JFrame implements Runnable {
     int xsize = -1;
     int ysize = -1;
     Image image;
+    //Image playerOneMob;
     Graphics2D g;
     
     final int numRows = 20;
@@ -83,7 +84,6 @@ public class Game extends JFrame implements Runnable {
                         if(playerOne.mobs[i].getCurrColumn() == currentColumn && playerOne.mobs[i].getCurrRow() == currentRow)
                         {
                             playerOne.mobs[i].setSelected(true);
-                            playerOne.mobs[i].setColor(Color.blue);
                         }
                     }
                     else
@@ -93,7 +93,6 @@ public class Game extends JFrame implements Runnable {
                         if(playerTwo.mobs[i].getCurrColumn() == currentColumn && playerTwo.mobs[i].getCurrRow() == currentRow)
                         {
                             playerTwo.mobs[i].setSelected(true);
-                            playerTwo.mobs[i].setColor(Color.blue);
                         }
                     }    
                 }
@@ -304,6 +303,9 @@ public class Game extends JFrame implements Runnable {
                     getY(0)+playerOne.mobs[i].getCurrRow()*getHeight2()/numRows,
                     getWidth2()/numColumns,
                     getHeight2()/numRows);
+                   //playerOneMob.draw(g,w,frogImage,width,height,this);
+                    
+                    
                     
                     playerTwo.mobs[i].draw(g,getX(0)+playerTwo.mobs[i].getCurrColumn()*getWidth2()/numColumns,
                     getY(0)+playerTwo.mobs[i].getCurrRow()*getHeight2()/numRows,
@@ -312,6 +314,7 @@ public class Game extends JFrame implements Runnable {
                 }
                
                  g.drawString("Player 1 Turns Left : " + playerOne.getNumTurns(), 32, 50);  
+                 g.drawString("Player 2 Turns Left : " + playerTwo.getNumTurns(), 332, 50);  
 
  
       gOld.drawImage(image, 0, 0, null);
@@ -335,10 +338,11 @@ public class Game extends JFrame implements Runnable {
     public void reset() {
         playerOne = new Player();
         playerTwo = new Player();
+        playerOneTurn = true;
 
         for(int i =0; i<numMobs;i++){
         playerOne.mobs[i] = new Mob(Color.black);
-        playerTwo.mobs[i] = new Mob(Color.red);
+        playerTwo.mobs[i] = new Mob(Color.blue);
         }
        
         for(int i =0; i<numMobs;i++){
@@ -347,7 +351,8 @@ public class Game extends JFrame implements Runnable {
         playerOne.mobs[i].setCurrRow(0);
         playerTwo.mobs[i].setCurrRow(numRows-1);
         }
-
+        
+        playerTwo.setNumTurns(0);
     }
 /////////////////////////////////////////////////////////////////////////
     public void animate() {
@@ -359,8 +364,27 @@ public class Game extends JFrame implements Runnable {
                 ysize = getSize().height;
             }
             reset();
+            //playerOneMob=Toolkit.getDefaultToolkit().getImage("./frog.GIF");
         }
         
+        if(playerOne.getNumTurns() <= 0 && playerOneTurn)
+        {
+            playerOneTurn = false;
+            playerTwo.setNumTurns((int)(Math.random() * 16 +1));
+            for(int i = 0; i < numMobs;i++)
+             {
+                playerTwo.mobs[i].setSelected(false);
+             } 
+        }
+        else if(playerTwo.getNumTurns() <= 0 && !playerOneTurn)
+        {
+            playerOneTurn = true;
+            playerOne.setNumTurns((int)(Math.random() * 16 +1));
+            for(int i = 0; i < numMobs;i++)
+             {
+                playerOne.mobs[i].setSelected(false);
+             }
+        }
         
       timeCount++;  
     }
