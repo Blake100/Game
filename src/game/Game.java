@@ -24,6 +24,9 @@ public class Game extends JFrame implements Runnable {
     Image image;
     Image playerOneMobLeft;
     Image playerOneMobRight;
+    Image tree;
+    Image grassblock;
+    
     Graphics2D g;
     
     final int numRows = 20;
@@ -364,6 +367,27 @@ public class Game extends JFrame implements Runnable {
                     .5,
                     .5);
                 }
+                //draws trees
+                    for(int i = 0;i < numRows;i++)
+                    drawTree(tree,(getX(0)+i*getWidth2()/numColumns) + ((getWidth2()/numColumns)/2),
+                    (getY(0)+0*getHeight2()/numRows) + ((getHeight2()/numRows)/2)  ,0.0,
+                    .25,
+                    .25);
+                    for(int i = 0;i < numRows;i++)
+                    drawTree(tree,(getX(0)+i*getWidth2()/numColumns) + ((getWidth2()/numColumns)/2),
+                    (getY(0)+(numRows-1)*getHeight2()/numRows) + ((getHeight2()/numRows)/2)  ,0.0,
+                    .25,
+                    .25);
+                      for(int i = 0;i < numRows;i++)
+                    drawTree(tree,(getX(0)+(numColumns-1)*getWidth2()/numColumns) + ((getWidth2()/numColumns)/2),
+                    (getY(0)+i*getHeight2()/numRows) + ((getHeight2()/numRows)/2)  ,0.0,
+                    .25,
+                    .25);
+                    for(int i = 0;i < numRows;i++)
+                    drawTree(tree,(getX(0)+0*getWidth2()/numColumns) + ((getWidth2()/numColumns)/2),
+                    (getY(0)+i*getHeight2()/numRows) + ((getHeight2()/numRows)/2)  ,0.0,
+                    .25,
+                    .25);
                
                  g.drawString("Player 1 Turns Left : " + playerOne.getNumTurns(), 32, 50);  
                  g.drawString("Player 2 Turns Left : " + playerTwo.getNumTurns(), 332, 50);  
@@ -373,10 +397,27 @@ public class Game extends JFrame implements Runnable {
                  else
                  g.drawString("Player Two Turn", 532, 50);  
 
+                 
+                 
  
       gOld.drawImage(image, 0, 0, null);
     }
     public void drawCharacter(Image image,int xpos,int ypos,double rot,double xscale,
+        double yscale) {
+        int width = image.getWidth(this);
+        int height = image.getHeight(this);
+        g.translate(xpos,ypos);
+        g.rotate(rot  * Math.PI/180.0);
+        g.scale( xscale , yscale );
+
+        g.drawImage(image,-width/2,-height/2,
+        width,height,this);
+
+        g.scale( 1.0/xscale,1.0/yscale );
+        g.rotate(-rot  * Math.PI/180.0);
+        g.translate(-xpos,-ypos);
+    }
+    public void drawTree(Image image,int xpos,int ypos,double rot,double xscale,
         double yscale) {
         int width = image.getWidth(this);
         int height = image.getHeight(this);
@@ -419,8 +460,8 @@ public class Game extends JFrame implements Runnable {
         for(int i =0; i<numMobs;i++){
         playerOne.mobs[i].setCurrColumn(6+(i*3));
         playerTwo.mobs[i].setCurrColumn(6+(i*3));
-        playerOne.mobs[i].setCurrRow(0);
-        playerTwo.mobs[i].setCurrRow(numRows-1);
+        playerOne.mobs[i].setCurrRow(1);
+        playerTwo.mobs[i].setCurrRow(numRows-2);
         }
         
         playerTwo.setNumTurns(0);
@@ -437,6 +478,8 @@ public class Game extends JFrame implements Runnable {
             reset();
             playerOneMobLeft = Toolkit.getDefaultToolkit().getImage("./starwarscharacterleft.GIF");
             playerOneMobRight = Toolkit.getDefaultToolkit().getImage("./starwarscharacterright.GIF");
+            tree = Toolkit.getDefaultToolkit().getImage("./tree.GIF");
+            grassblock = Toolkit.getDefaultToolkit().getImage("./grassblock.GIF");
         }
         
         if(playerOne.getNumTurns() <= 0 && playerOneTurn)
