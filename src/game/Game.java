@@ -22,7 +22,8 @@ public class Game extends JFrame implements Runnable {
     int xsize = -1;
     int ysize = -1;
     Image image;
-    //Image playerOneMob;
+    Image playerOneMobLeft;
+    Image playerOneMobRight;
     Graphics2D g;
     
     final int numRows = 20;
@@ -120,6 +121,25 @@ public class Game extends JFrame implements Runnable {
         addKeyListener(new KeyAdapter() {
 
             public void keyPressed(KeyEvent e) {
+                if (e.VK_D == e.getKeyCode())
+                {
+                    if(playerOneTurn)
+                    for(int i = 0; i < numMobs;i++)
+                    {
+                      if(playerOne.mobs[i].isSelected())
+                      {
+                            playerOne.mobs[i].setDir(0);
+                      }
+                    }
+                    else
+                    for(int i = 0; i < numMobs;i++)
+                    {
+                      if(playerTwo.mobs[i].isSelected())
+                      {
+                            playerTwo.mobs[i].setDir(0);
+                      }
+                    }
+                }
                 if (e.VK_RIGHT == e.getKeyCode())
                 {
                     if(playerOneTurn)
@@ -131,6 +151,7 @@ public class Game extends JFrame implements Runnable {
                           {
                             playerOne.mobs[i].setCurrColumn(playerOne.mobs[i].getCurrColumn()+1);
                             playerOne.setNumTurns(playerOne.getNumTurns()-1);
+                            playerOne.mobs[i].setDir(0);
                           }
                       }
                     }
@@ -143,7 +164,27 @@ public class Game extends JFrame implements Runnable {
                           {
                             playerTwo.mobs[i].setCurrColumn(playerTwo.mobs[i].getCurrColumn()+1);
                             playerTwo.setNumTurns(playerTwo.getNumTurns()-1);
+                            playerTwo.mobs[i].setDir(0);
                           }
+                      }
+                    }
+                }
+                  if (e.VK_A == e.getKeyCode())
+                {
+                    if(playerOneTurn)
+                    for(int i = 0; i < numMobs;i++)
+                    {
+                      if(playerOne.mobs[i].isSelected())
+                      {
+                            playerOne.mobs[i].setDir(1);
+                      }
+                    }
+                    else
+                    for(int i = 0; i < numMobs;i++)
+                    {
+                      if(playerTwo.mobs[i].isSelected())
+                      {
+                            playerTwo.mobs[i].setDir(1);
                       }
                     }
                 }
@@ -158,6 +199,7 @@ public class Game extends JFrame implements Runnable {
                                 {
                                    playerOne.mobs[i].setCurrColumn(playerOne.mobs[i].getCurrColumn()-1);
                                    playerOne.setNumTurns(playerOne.getNumTurns()-1);
+                                   playerOne.mobs[i].setDir(1);
                                 }
                           }
                         }
@@ -170,6 +212,7 @@ public class Game extends JFrame implements Runnable {
                                 {
                                    playerTwo.mobs[i].setCurrColumn(playerTwo.mobs[i].getCurrColumn()-1);
                                    playerTwo.setNumTurns(playerTwo.getNumTurns()-1);
+                                   playerTwo.mobs[i].setDir(1);
                                 }
                           }
                         }
@@ -299,27 +342,55 @@ public class Game extends JFrame implements Runnable {
 
                 for(int i = 0; i < numMobs;i++)
                 {
-                    playerOne.mobs[i].draw(g,getX(0)+playerOne.mobs[i].getCurrColumn()*getWidth2()/numColumns,
-                    getY(0)+playerOne.mobs[i].getCurrRow()*getHeight2()/numRows,
-                    getWidth2()/numColumns,
-                    getHeight2()/numRows);
-                   //playerOneMob.draw(g,w,frogImage,width,height,this);
+                    if(playerOne.mobs[i].getDir() == 1)
+                    drawCharacter(playerOneMobLeft,(getX(0)+playerOne.mobs[i].getCurrColumn()*getWidth2()/numColumns) + ((getWidth2()/numColumns)/2),
+                    (getY(0)+playerOne.mobs[i].getCurrRow()*getHeight2()/numRows) + ((getHeight2()/numRows)/2)  ,0.0,
+                    .5,
+                    .5);
+                    else if(playerOne.mobs[i].getDir() == 0)
+                    drawCharacter(playerOneMobRight,(getX(0)+playerOne.mobs[i].getCurrColumn()*getWidth2()/numColumns) + ((getWidth2()/numColumns)/2),
+                    (getY(0)+playerOne.mobs[i].getCurrRow()*getHeight2()/numRows) + ((getHeight2()/numRows)/2)  ,0.0,
+                    .5,
+                    .5);
                     
-                    
-                    
-                    playerTwo.mobs[i].draw(g,getX(0)+playerTwo.mobs[i].getCurrColumn()*getWidth2()/numColumns,
-                    getY(0)+playerTwo.mobs[i].getCurrRow()*getHeight2()/numRows,
-                    getWidth2()/numColumns,
-                    getHeight2()/numRows);
+                     if(playerTwo.mobs[i].getDir() == 1)
+                    drawCharacter(playerOneMobLeft,(getX(0)+playerTwo.mobs[i].getCurrColumn()*getWidth2()/numColumns) + ((getWidth2()/numColumns)/2),
+                    (getY(0)+playerTwo.mobs[i].getCurrRow()*getHeight2()/numRows) + ((getHeight2()/numRows)/2)  ,0.0,
+                    .5,
+                    .5);
+                     else if(playerTwo.mobs[i].getDir() == 0)
+                    drawCharacter(playerOneMobRight,(getX(0)+playerTwo.mobs[i].getCurrColumn()*getWidth2()/numColumns) + ((getWidth2()/numColumns)/2),
+                    (getY(0)+playerTwo.mobs[i].getCurrRow()*getHeight2()/numRows) + ((getHeight2()/numRows)/2)  ,0.0,
+                    .5,
+                    .5);
                 }
                
                  g.drawString("Player 1 Turns Left : " + playerOne.getNumTurns(), 32, 50);  
                  g.drawString("Player 2 Turns Left : " + playerTwo.getNumTurns(), 332, 50);  
+                 
+                 if(playerOneTurn)
+                 g.drawString("Player One Turn", 532, 50);  
+                 else
+                 g.drawString("Player Two Turn", 532, 50);  
 
  
       gOld.drawImage(image, 0, 0, null);
     }
+    public void drawCharacter(Image image,int xpos,int ypos,double rot,double xscale,
+        double yscale) {
+        int width = image.getWidth(this);
+        int height = image.getHeight(this);
+        g.translate(xpos,ypos);
+        g.rotate(rot  * Math.PI/180.0);
+        g.scale( xscale , yscale );
 
+        g.drawImage(image,-width/2,-height/2,
+        width,height,this);
+
+        g.scale( 1.0/xscale,1.0/yscale );
+        g.rotate(-rot  * Math.PI/180.0);
+        g.translate(-xpos,-ypos);
+    }
 ////////////////////////////////////////////////////////////////////////////
 // needed for     implement runnable
     public void run() {
@@ -364,7 +435,8 @@ public class Game extends JFrame implements Runnable {
                 ysize = getSize().height;
             }
             reset();
-            //playerOneMob=Toolkit.getDefaultToolkit().getImage("./frog.GIF");
+            playerOneMobLeft = Toolkit.getDefaultToolkit().getImage("./starwarscharacterleft.GIF");
+            playerOneMobRight = Toolkit.getDefaultToolkit().getImage("./starwarscharacterright.GIF");
         }
         
         if(playerOne.getNumTurns() <= 0 && playerOneTurn)

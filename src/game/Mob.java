@@ -9,6 +9,11 @@ public class Mob {
     private int health, dir;
     private int currRow,currColumn;
     private Color color;
+    private static final int RIGHT = 0; 
+    private static final int LEFT = 1; 
+    private static final int UP = 2; 
+    private static final int DOWN = 3; 
+    
     Mob(Color color){
         health = 2;
         Selected = false;
@@ -68,6 +73,6 @@ public class Mob {
         g.setColor(color);
         g.fillOval(xpos,ypos,width,height);
     }
-  
+    
     
 }
