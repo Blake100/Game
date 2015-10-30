@@ -224,7 +224,7 @@ public class Game extends JFrame implements Runnable {
                                       board[playerTwo.mobs[i].getCurrColumn()+1][playerTwo.mobs[i].getCurrRow()] != MOB)
                                 {
                                    board[playerTwo.mobs[i].getCurrColumn()][playerTwo.mobs[i].getCurrRow()]=EMPTY;
-                                   board[playerTwo.mobs[i].getCurrColumn()+1][playerTwo.mobs[i].getCurrRow()] = MOB;
+                                   board[playerTwo.mobs[i].getCurrColumn()-1][playerTwo.mobs[i].getCurrRow()] = MOB;
                                    playerTwo.mobs[i].setCurrColumn(playerTwo.mobs[i].getCurrColumn()-1);
                                    playerTwo.setNumTurns(playerTwo.getNumTurns()-1);
                                    playerTwo.mobs[i].setDir(1);
