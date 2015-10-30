@@ -143,6 +143,44 @@ public class Game extends JFrame implements Runnable {
                       }
                     }
                 }
+                if (e.VK_W == e.getKeyCode())
+                {
+                    if(playerOneTurn)
+                    for(int i = 0; i < numMobs;i++)
+                    {
+                      if(playerOne.mobs[i].isSelected())
+                      {
+                            playerOne.mobs[i].setDir(2);
+                      }
+                    }
+                    else
+                    for(int i = 0; i < numMobs;i++)
+                    {
+                      if(playerTwo.mobs[i].isSelected())
+                      {
+                            playerTwo.mobs[i].setDir(2);
+                      }
+                    }
+                }
+                if (e.VK_S == e.getKeyCode())
+                {
+                    if(playerOneTurn)
+                    for(int i = 0; i < numMobs;i++)
+                    {
+                      if(playerOne.mobs[i].isSelected())
+                      {
+                            playerOne.mobs[i].setDir(3);
+                      }
+                    }
+                    else
+                    for(int i = 0; i < numMobs;i++)
+                    {
+                      if(playerTwo.mobs[i].isSelected())
+                      {
+                            playerTwo.mobs[i].setDir(3);
+                      }
+                    }
+                }
                 if (e.VK_RIGHT == e.getKeyCode())
                 {
                     if(playerOneTurn)
@@ -302,6 +340,10 @@ public class Game extends JFrame implements Runnable {
                 {
                     frame1.setVisible(false);
                     gui.setVisible(true);
+                    
+                }
+                if(e.VK_SPACE == e.getKeyCode())
+                {
                     
                 }
 

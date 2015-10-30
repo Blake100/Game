@@ -5,7 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class Mob {
-    private boolean Selected;
+    private boolean Selected,visible;
     private int health, dir;
     private int currRow,currColumn;
     private Color color;
@@ -21,6 +21,13 @@ public class Mob {
         this.color = color;
     }
 
+    public void tick(){
+        if(health<=0){
+            visible = false;
+            currRow=0;
+            currColumn=0;
+        }
+    }
     public boolean isSelected() {
         return Selected;
     }
@@ -70,9 +77,47 @@ public class Mob {
     }
     public void draw(Graphics2D g,int xpos, int ypos,int width, int height)
     {
+        if(visible){
         g.setColor(color);
         g.fillOval(xpos,ypos,width,height);
+        }
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
     
-    
+    public void shoot(Player enemy){
+        for(int i=0;i<Game.numMobs;i++)
+        {
+            if(dir==RIGHT)
+            {
+                if(enemy.mobs[i].getCurrRow()== currRow && currColumn < enemy.mobs[i].getCurrColumn()){
+                    enemy.mobs[i].setHealth(enemy.mobs[i].getHealth()-1);
+                }
+            }
+            if(dir==LEFT)
+            {
+                if(enemy.mobs[i].getCurrRow()== currRow && currColumn > enemy.mobs[i].getCurrColumn()){
+                    enemy.mobs[i].setHealth(enemy.mobs[i].getHealth()-1);
+                }
+            }
+            if(dir==UP)
+            {
+                if(enemy.mobs[i].getCurrColumn()== currColumn && currRow < enemy.mobs[i].getCurrRow()){
+                    enemy.mobs[i].setHealth(enemy.mobs[i].getHealth()-1);
+                }
+            }
+            if(dir==DOWN)
+            {
+                if(enemy.mobs[i].getCurrColumn()== currColumn && currRow > enemy.mobs[i].getCurrRow()){
+                    enemy.mobs[i].setHealth(enemy.mobs[i].getHealth()-1);
+                }
+            }
+        }
+    }
 }
