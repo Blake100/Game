@@ -9,15 +9,16 @@ public class Mob {
     private int health, dir;
     private int currRow,currColumn;
     private Color color;
-    private static final int RIGHT = 0; 
-    private static final int LEFT = 1; 
-    private static final int UP = 2; 
-    private static final int DOWN = 3; 
+    private static final int RIGHT = 1; 
+    private static final int LEFT = 3; 
+    private static final int UP = 0; 
+    private static final int DOWN = 2; 
     
     Mob(Color color){
         health = 2;
         Selected = false;
         dir=1;
+        visible = true;
         this.color = color;
     }
 
@@ -98,26 +99,31 @@ public class Mob {
             {
                 if(enemy.mobs[i].getCurrRow()== currRow && currColumn < enemy.mobs[i].getCurrColumn()){
                     enemy.mobs[i].setHealth(enemy.mobs[i].getHealth()-1);
+                    System.out.println("Zing");
                 }
             }
             if(dir==LEFT)
             {
                 if(enemy.mobs[i].getCurrRow()== currRow && currColumn > enemy.mobs[i].getCurrColumn()){
                     enemy.mobs[i].setHealth(enemy.mobs[i].getHealth()-1);
+                    System.out.println("Zing");
                 }
             }
             if(dir==UP)
             {
-                if(enemy.mobs[i].getCurrColumn()== currColumn && currRow < enemy.mobs[i].getCurrRow()){
+                if(enemy.mobs[i].getCurrColumn()== currColumn && currRow > enemy.mobs[i].getCurrRow()){
                     enemy.mobs[i].setHealth(enemy.mobs[i].getHealth()-1);
+                    System.out.println("Zing");
                 }
             }
             if(dir==DOWN)
             {
-                if(enemy.mobs[i].getCurrColumn()== currColumn && currRow > enemy.mobs[i].getCurrRow()){
+                if(enemy.mobs[i].getCurrColumn()== currColumn && currRow < enemy.mobs[i].getCurrRow()){
                     enemy.mobs[i].setHealth(enemy.mobs[i].getHealth()-1);
+                    System.out.println("Zing");
                 }
             }
         }
+        System.out.println("Shoot");
     }
 }
