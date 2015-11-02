@@ -188,11 +188,11 @@ public class Game extends JFrame implements Runnable {
                     {
                       if(playerOne.mobs[i].isSelected())
                       {
-                          if(playerOne.getNumTurns() >0 && board[playerOne.mobs[i].getCurrColumn()+1][playerOne.mobs[i].getCurrRow()] != SOLID
-                                   && board[playerOne.mobs[i].getCurrColumn()+1][playerOne.mobs[i].getCurrRow()] != MOB)
+                          if(playerOne.getNumTurns() >0 && board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()+1] != SOLID
+                                   && board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()+1] != MOB)
                           {
-                            board[playerOne.mobs[i].getCurrColumn()][playerOne.mobs[i].getCurrRow()]=EMPTY;
-                            board[playerOne.mobs[i].getCurrColumn()+1][playerOne.mobs[i].getCurrRow()] = MOB;
+                            board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()]=EMPTY;
+                            board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()+1] = MOB;
                             playerOne.mobs[i].setCurrColumn(playerOne.mobs[i].getCurrColumn()+1);
                             playerOne.setNumTurns(playerOne.getNumTurns()-1);
                             playerOne.mobs[i].setDir(0);
@@ -204,11 +204,11 @@ public class Game extends JFrame implements Runnable {
                     {
                       if(playerTwo.mobs[i].isSelected())
                       {
-                          if(playerTwo.getNumTurns() >0 && board[playerTwo.mobs[i].getCurrColumn()-1][playerTwo.mobs[i].getCurrRow()] != SOLID 
-                                  && board[playerTwo.mobs[i].getCurrColumn()+1][playerTwo.mobs[i].getCurrRow()] != MOB)
+                          if(playerTwo.getNumTurns() >0 && board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()+1] != SOLID 
+                                  && board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()+1] != MOB)
                           {
-                            board[playerTwo.mobs[i].getCurrColumn()][playerTwo.mobs[i].getCurrRow()]=EMPTY;
-                            board[playerTwo.mobs[i].getCurrColumn()+1][playerTwo.mobs[i].getCurrRow()] = MOB;
+                            board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()]=EMPTY;
+                            board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()+1] = MOB;
                             playerTwo.mobs[i].setCurrColumn(playerTwo.mobs[i].getCurrColumn()+1);
                             playerTwo.setNumTurns(playerTwo.getNumTurns()-1);
                             playerTwo.mobs[i].setDir(0);
@@ -242,11 +242,11 @@ public class Game extends JFrame implements Runnable {
                         {
                           if(playerOne.mobs[i].isSelected())
                           {
-                              if(playerOne.getNumTurns() >0 && board[playerOne.mobs[i].getCurrColumn()-1][playerOne.mobs[i].getCurrRow()] != SOLID &&
-                                      board[playerOne.mobs[i].getCurrColumn()-1][playerOne.mobs[i].getCurrRow()] != MOB)
+                              if(playerOne.getNumTurns() >0 && board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()-1] != SOLID &&
+                                     board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()-1] != MOB)
                                 {
-                                   board[playerOne.mobs[i].getCurrColumn()][playerOne.mobs[i].getCurrRow()]=EMPTY;
-                                   board[playerOne.mobs[i].getCurrColumn()-1][playerOne.mobs[i].getCurrRow()] = MOB;
+                                   board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()]=EMPTY;
+                                   board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()-1]=MOB;
                                    playerOne.mobs[i].setCurrColumn(playerOne.mobs[i].getCurrColumn()-1);
                                    playerOne.setNumTurns(playerOne.getNumTurns()-1);
                                    playerOne.mobs[i].setDir(1);
@@ -258,11 +258,11 @@ public class Game extends JFrame implements Runnable {
                         {
                           if(playerTwo.mobs[i].isSelected())
                           {
-                              if(playerTwo.getNumTurns() >0 && board[playerTwo.mobs[i].getCurrColumn()-1][playerTwo.mobs[i].getCurrRow()] != SOLID && 
-                                      board[playerTwo.mobs[i].getCurrColumn()+1][playerTwo.mobs[i].getCurrRow()] != MOB)
+                              if(playerTwo.getNumTurns() >0 && board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()-1] != SOLID && 
+                                      board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()-1] != MOB)
                                 {
-                                   board[playerTwo.mobs[i].getCurrColumn()][playerTwo.mobs[i].getCurrRow()]=EMPTY;
-                                   board[playerTwo.mobs[i].getCurrColumn()-1][playerTwo.mobs[i].getCurrRow()] = MOB;
+                                   board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()]=EMPTY;
+                                   board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()-1] = MOB;
                                    playerTwo.mobs[i].setCurrColumn(playerTwo.mobs[i].getCurrColumn()-1);
                                    playerTwo.setNumTurns(playerTwo.getNumTurns()-1);
                                    playerTwo.mobs[i].setDir(1);
@@ -277,11 +277,11 @@ public class Game extends JFrame implements Runnable {
                         {
                           if(playerOne.mobs[i].isSelected())
                           {
-                              if(playerOne.getNumTurns() >0 && board[playerOne.mobs[i].getCurrColumn()][playerOne.mobs[i].getCurrRow()-1] != SOLID &&
-                                      board[playerOne.mobs[i].getCurrColumn()][playerOne.mobs[i].getCurrRow()-1] != MOB)
+                              if(playerOne.getNumTurns() >0 && board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()] != SOLID &&
+                                      board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()] != MOB)
                                 {
-                                    board[playerOne.mobs[i].getCurrColumn()][playerOne.mobs[i].getCurrRow()]=EMPTY;
-                                    board[playerOne.mobs[i].getCurrColumn()][playerOne.mobs[i].getCurrRow()-1] = MOB;
+                                    board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()] = EMPTY;
+                                    board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()] = MOB;
                                     playerOne.mobs[i].setCurrRow(playerOne.mobs[i].getCurrRow()-1);
                                     playerOne.setNumTurns(playerOne.getNumTurns()-1);
                                 }
@@ -292,11 +292,11 @@ public class Game extends JFrame implements Runnable {
                         {
                           if(playerTwo.mobs[i].isSelected())
                           {
-                              if(playerTwo.getNumTurns() >0 && board[playerTwo.mobs[i].getCurrColumn()][playerTwo.mobs[i].getCurrRow()-1] != SOLID &&
-                                      board[playerTwo.mobs[i].getCurrColumn()][playerTwo.mobs[i].getCurrRow()-1] != MOB)
+                              if(playerTwo.getNumTurns() >0 && board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()] != SOLID &&
+                                      board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()] != MOB)
                                 {
-                                    board[playerTwo.mobs[i].getCurrColumn()][playerTwo.mobs[i].getCurrRow()]=EMPTY;
-                                    board[playerTwo.mobs[i].getCurrColumn()][playerTwo.mobs[i].getCurrRow()-1] = MOB;
+                                    board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()]   = EMPTY;
+                                    board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()] = MOB;
                                     playerTwo.mobs[i].setCurrRow(playerTwo.mobs[i].getCurrRow()-1);
                                     playerTwo.setNumTurns(playerTwo.getNumTurns()-1);
                                 }
@@ -310,11 +310,11 @@ public class Game extends JFrame implements Runnable {
                         {
                           if(playerOne.mobs[i].isSelected())
                           {
-                              if(playerOne.getNumTurns() >0 && board[playerOne.mobs[i].getCurrColumn()][playerOne.mobs[i].getCurrRow()+1] != SOLID &&
-                                      board[playerOne.mobs[i].getCurrColumn()][playerOne.mobs[i].getCurrRow()+1] != MOB)
+                              if(playerOne.getNumTurns() >0 && board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()] != SOLID &&
+                                      board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()] != MOB)
                                 {
-                                    board[playerOne.mobs[i].getCurrColumn()][playerOne.mobs[i].getCurrRow()]=EMPTY;
-                                    board[playerOne.mobs[i].getCurrColumn()][playerOne.mobs[i].getCurrRow()+1] = MOB;
+                                    board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()] = EMPTY;
+                                    board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()] = MOB;
                                     playerOne.mobs[i].setCurrRow(playerOne.mobs[i].getCurrRow()+1);
                                     playerOne.setNumTurns(playerOne.getNumTurns()-1);
                                 }
@@ -325,11 +325,11 @@ public class Game extends JFrame implements Runnable {
                         {
                           if(playerTwo.mobs[i].isSelected())
                           {
-                              if(playerTwo.getNumTurns() >0 && board[playerTwo.mobs[i].getCurrColumn()][playerTwo.mobs[i].getCurrRow()+1] != SOLID &&
-                                      board[playerTwo.mobs[i].getCurrColumn()][playerTwo.mobs[i].getCurrRow()+1] != MOB)
+                              if(playerTwo.getNumTurns() >0 && board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()] != SOLID &&
+                                      board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()] != MOB)
                                 {
-                                    board[playerTwo.mobs[i].getCurrColumn()][playerTwo.mobs[i].getCurrRow()]=EMPTY;
-                                    board[playerTwo.mobs[i].getCurrColumn()][playerTwo.mobs[i].getCurrRow()+1] = MOB;
+                                    board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()]=EMPTY;
+                                    board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()] = MOB;
                                     playerTwo.mobs[i].setCurrRow(playerTwo.mobs[i].getCurrRow()+1);
                                     playerTwo.setNumTurns(playerTwo.getNumTurns()-1);
                                 }
@@ -513,6 +513,10 @@ public class Game extends JFrame implements Runnable {
         }
         for(int i = 0; i<numColumns;i++){
         board[0][i]=SOLID;
+        board[numColumns-1][i]= SOLID;
+        }
+        for(int i = 0; i<numColumns;i++){
+        board[10][i]=SOLID;
         board[numColumns-1][i]= SOLID;
         }
         
