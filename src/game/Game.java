@@ -5,7 +5,7 @@
 package game;
 
 import GUI.SettingsMenu;
-import GUI.GUI;
+import GUI.Menu;
 import static game.Game.WINDOW_BORDER;
 import java.io.*;
 import java.awt.*;
@@ -25,6 +25,10 @@ public class Game extends JFrame implements Runnable {
     int ysize = -1;
     Image image;
     Image character;
+    Image Floor; 
+    Image WallY, WallX, Wall;
+    
+    
     Graphics2D g;
     
     final int numRows = 20;
@@ -45,12 +49,16 @@ public class Game extends JFrame implements Runnable {
     int rowDir;
     
     boolean gameOver, playerOneTurn;
+    enum WinState{
+        playerOne, playerTwo
+    }
+    
     
     int timeCount;
     int timeSpeedVal;
     
     public static Game frame1;
-    public static GUI gui;
+    public static Menu gui;
     public static SettingsMenu settings;
     public static void main(String[] args) {
         frame1 = new Game();
@@ -58,7 +66,7 @@ public class Game extends JFrame implements Runnable {
         frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame1.setVisible(false);
         
-        gui = new GUI();
+        gui = new Menu();
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gui.setVisible(true);
        
@@ -427,7 +435,23 @@ public class Game extends JFrame implements Runnable {
             getX(0)+zi*getWidth2()/numColumns,getY(getHeight2())  );
         }
 
-                for(int i = 0; i < numMobs;i++)
+                
+               
+                 g.drawString("Player 1 Turns Left : " + playerOne.getNumTurns(), 32, 50);  
+                 g.drawString("Player 2 Turns Left : " + playerTwo.getNumTurns(), 332, 50);  
+                 
+                 if(playerOneTurn)
+                 g.drawString("Player One Turn", 532, 50);  
+                 else
+                 g.drawString("Player Two Turn", 532, 50);  
+
+                 for(int i = 0; i<numRows;i++){
+                    for(int u = 0; u< numColumns;u++){
+                        drawTile(Floor,(getX(0)+u*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),(getY(0)+i*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5);
+                    }
+                }
+                 
+                 for(int i = 0; i < numMobs;i++)
                 {
                     int playerOneMobDir = playerOne.mobs[i].getDir();
                     int playerTwoMobDir = playerTwo.mobs[i].getDir();
@@ -440,22 +464,16 @@ public class Game extends JFrame implements Runnable {
                     
                      
                 }
-               
-                 g.drawString("Player 1 Turns Left : " + playerOne.getNumTurns(), 32, 50);  
-                 g.drawString("Player 2 Turns Left : " + playerTwo.getNumTurns(), 332, 50);  
                  
-                 if(playerOneTurn)
-                 g.drawString("Player One Turn", 532, 50);  
-                 else
-                 g.drawString("Player Two Turn", 532, 50);  
-
                  for(int i = 0; i<numRows;i++){
                     for(int u = 0; u< numColumns;u++){
                         if(board[i][u]==SOLID)
-                            g.fillRect((getX(0)+u*getWidth2()/(numColumns)),
-                                       (getY(0)+i*getHeight2()/(numRows)),
-                                       getWidth2()/numColumns +1,
-                                       getHeight2()/numRows);
+                            drawTile(Wall,(getX(0)+u*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),(getY(0)+i*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5);
+//                            g.fillRect((getX(0)+u*getWidth2()/(numColumns)),
+//                                       (getY(0)+i*getHeight2()/(numRows)),
+//                                       getWidth2()/numColumns +1,
+//                                       getHeight2()/numRows);
+                        
                     }
                 }
  
@@ -541,7 +559,11 @@ public class Game extends JFrame implements Runnable {
                 ysize = getSize().height;
             }
             reset();
-            character = Toolkit.getDefaultToolkit().getImage("./char.png");
+            character = Toolkit.getDefaultToolkit().getImage("./resources/char.png");
+            Floor = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/Floor1.png");
+            WallX = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/WallHorizontal.png");
+            WallY = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/WallVertical.png");
+            Wall = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/Wall.png");
         }
         
         if(playerOne.getNumTurns() <= 0 && playerOneTurn)
@@ -566,7 +588,22 @@ public class Game extends JFrame implements Runnable {
         playerTwo.tick();
       timeCount++;  
     }
-
+////////////////////////////////////////////////////////////////////////////
+    public void drawTile(Image Tile, int xpos, int ypos, double rot, double xscale,double yscale)
+    {
+        int width = Tile.getWidth(this);
+        int height = Tile.getWidth(this);
+        
+        g.translate(xpos,ypos);
+        g.rotate(rot  * Math.PI/180.0);
+        g.scale( xscale , yscale );
+        
+        g.drawImage(Tile,-width/2,-height/2,width,height,this);
+        
+        g.scale( 1.0/xscale,1.0/yscale );
+        g.rotate(-rot  * Math.PI/180.0);
+        g.translate(-xpos,-ypos);
+    }
 ////////////////////////////////////////////////////////////////////////////
     public void start() {
         if (relaxer == null) {
