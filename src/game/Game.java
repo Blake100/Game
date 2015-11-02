@@ -490,7 +490,7 @@ public class Game extends JFrame implements Runnable {
     }
 /////////////////////////////////////////////////////////////////////////
     public void reset() {
-        board = new int[numRows][numColumns];
+        board = new int[numColumns][numRows];
         playerOne = new Player();
         playerTwo = new Player();
         playerOneTurn = true;
@@ -509,9 +509,10 @@ public class Game extends JFrame implements Runnable {
         }
         for(int i = 0; i<numRows;i++){
             for(int u = 0; u< numColumns;u++){
-                board[i][u] = EMPTY;
+                board[u][i] = EMPTY;
             }
         }
+        
         for(int i = 0; i<numRows;i++){
         board[i][0]=SOLID;
         board[i][numRows-1]= SOLID;
@@ -520,6 +521,11 @@ public class Game extends JFrame implements Runnable {
         board[0][i]=SOLID;
         board[numColumns-1][i]= SOLID;
         }
+        for(int i = 0; i<numColumns;i++){
+        board[10][i]=SOLID;
+        board[numColumns-1][i]= SOLID;
+        }
+        
         
         playerTwo.setNumTurns(0);
     }
