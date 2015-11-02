@@ -9,6 +9,10 @@ public class Player {
     {
      numTurns = (int) (Math.random() * maxTurns + 1);    
     }
+    public void tick(){
+        for(int i = 0; i< mobs.length;i++)
+            mobs[i].tick();
+    }
     public int getNumTurns()
     {
         return numTurns;
