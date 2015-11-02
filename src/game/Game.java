@@ -4,6 +4,8 @@
  */
 package game;
 
+import GUI.SettingsMenu;
+import GUI.GUI;
 import static game.Game.WINDOW_BORDER;
 import java.io.*;
 import java.awt.*;
@@ -47,9 +49,9 @@ public class Game extends JFrame implements Runnable {
     int timeCount;
     int timeSpeedVal;
     
-    static Game frame1;
-    static GUI gui;
-    static SettingsMenu settings;
+    public static Game frame1;
+    public static GUI gui;
+    public static SettingsMenu settings;
     public static void main(String[] args) {
         frame1 = new Game();
         frame1.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -525,10 +527,7 @@ public class Game extends JFrame implements Runnable {
         board[10][i]=SOLID;
         board[numColumns-1][i]= SOLID;
         }
-<<<<<<< HEAD
-=======
-        
->>>>>>> origin/Collison
+
         
         playerTwo.setNumTurns(0);
     }
