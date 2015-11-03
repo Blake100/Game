@@ -99,32 +99,73 @@ public class Mob {
         {
             if(dir==RIGHT)
             {
+                boolean canshoot = true;
                 if(enemy.mobs[i].getCurrRow()== currRow && currColumn < enemy.mobs[i].getCurrColumn()){
+                    int loop = enemy.mobs[i].getCurrColumn() - currColumn;
+                    for (int u =0; u <= loop; u++)
+                        if(Game.board[currRow][currColumn+u]==Game.SOLID)
+                            canshoot = false;
+                    if(canshoot)
+                    {
                     enemy.mobs[i].setHealth(enemy.mobs[i].getHealth()-1);
                     System.out.println("Zing");
+                    }
                 }
             }
+            
+            
+            
             if(dir==LEFT)
             {
+                boolean canshoot = true;
                 if(enemy.mobs[i].getCurrRow()== currRow && currColumn > enemy.mobs[i].getCurrColumn()){
+                    int loop = currColumn - enemy.mobs[i].getCurrColumn();
+                    for (int u =0; u <= loop; u++)
+                        if(Game.board[currRow][currColumn-u]==Game.SOLID)
+                            canshoot = false;
+                    if(canshoot)
+                    {
                     enemy.mobs[i].setHealth(enemy.mobs[i].getHealth()-1);
                     System.out.println("Zing");
+                    }
                 }
             }
+            
+            
+            
             if(dir==UP)
             {
+                boolean canshoot = true;
                 if(enemy.mobs[i].getCurrColumn()== currColumn && currRow > enemy.mobs[i].getCurrRow()){
+                    int loop = currRow-enemy.mobs[i].getCurrRow();
+                    for (int u = 0; u<= loop; u++)
+                        if(Game.board[currRow-u][currColumn] == Game.SOLID)
+                            canshoot=false;
+                    if(canshoot){
                     enemy.mobs[i].setHealth(enemy.mobs[i].getHealth()-1);
                     System.out.println("Zing");
+                    }
                 }
             }
+            
+            
+            
             if(dir==DOWN)
             {
+                boolean canshoot = true;
                 if(enemy.mobs[i].getCurrColumn()== currColumn && currRow < enemy.mobs[i].getCurrRow()){
+                    int loop = enemy.mobs[i].getCurrRow()-currRow;
+                    for (int u = 0; u<= loop; u++)
+                        if(Game.board[currRow+u][currColumn] == Game.SOLID)
+                            canshoot=false;
+                    if(canshoot){
                     enemy.mobs[i].setHealth(enemy.mobs[i].getHealth()-1);
                     System.out.println("Zing");
+                    }
                 }
             }
+            
+            
         }
         System.out.println("Shoot");
     }

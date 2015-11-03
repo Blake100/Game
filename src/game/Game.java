@@ -35,10 +35,10 @@ public class Game extends JFrame implements Runnable {
     final int numRows = 20;
     final int numColumns = 20;
 
-    int board[][];
-    static final int MOB = 2;
-    static final int SOLID = 1;
-    static final int EMPTY = 0;
+    public static int board[][];
+    public static final int MOB = 2;
+    public static final int SOLID = 1;
+    public static final int EMPTY = 0;
     
     public static int numMobs = 3;
     Player playerOne, playerTwo;
