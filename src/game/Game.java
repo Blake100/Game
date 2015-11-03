@@ -25,10 +25,13 @@ public class Game extends JFrame implements Runnable {
     int xsize = -1;
     int ysize = -1;
     Image image;
+    Image dice1side,dice2side,dice3side,dice4side,dice5side,dice6side;
     Image character;
     Image Floor; 
     Image WallY, WallX, Wall;
     
+    boolean keepRollingDice;
+    boolean changeDice;
     
     Graphics2D g;
     
@@ -466,6 +469,7 @@ public class Game extends JFrame implements Runnable {
                      
                 }
                  
+                
                  for(int i = 0; i<numRows;i++){
                     for(int u = 0; u< numColumns;u++){
                         if(board[i][u]==SOLID)
@@ -477,10 +481,33 @@ public class Game extends JFrame implements Runnable {
                         
                     }
                 }
- 
+                 
+                 if(!changeDice)
+                 drawDice(dice1side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                 ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
+                 if(changeDice)
+                 drawDice(dice2side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                 ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
+                 
+                 
       gOld.drawImage(image, 0, 0, null);
     }
     public void drawCharacter(Image image,int xpos,int ypos,double rot,double xscale,
+        double yscale) {
+        int width = image.getWidth(this);
+        int height = image.getHeight(this);
+        g.translate(xpos,ypos);
+        g.rotate(rot  * Math.PI/180.0);
+        g.scale( xscale , yscale );
+
+        g.drawImage(image,-width/2,-height/2,
+        width,height,this);
+
+        g.scale( 1.0/xscale,1.0/yscale );
+        g.rotate(-rot  * Math.PI/180.0);
+        g.translate(-xpos,-ypos);
+    }
+    public void drawDice(Image image,int xpos,int ypos,double rot,double xscale,
         double yscale) {
         int width = image.getWidth(this);
         int height = image.getHeight(this);
@@ -515,6 +542,9 @@ public class Game extends JFrame implements Runnable {
         playerOne = new Player();
         playerTwo = new Player();
         playerOneTurn = true;
+        keepRollingDice = true;
+        changeDice = false;
+        timeCount = 0;
        
 
         for(int i =0; i<numMobs;i++){
@@ -565,6 +595,13 @@ public class Game extends JFrame implements Runnable {
             WallX = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/WallHorizontal.png");
             WallY = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/WallVertical.png");
             Wall = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/Wall.png");
+            
+            dice1side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/diceoneside.GIF");
+            dice2side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/dicetwoside.GIF");
+            dice3side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/dicethreeside.GIF");
+            dice4side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/dicefourside.GIF");
+            dice5side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/dicefiveside.GIF");
+            dice6side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/dicesixside.GIF");
         }
         
         if(playerOne.getNumTurns() <= 0 && playerOneTurn)
@@ -587,6 +624,12 @@ public class Game extends JFrame implements Runnable {
         }
         playerOne.tick();
         playerTwo.tick();
+       
+        if(timeCount % 2 == 1)
+        {
+            changeDice = true;
+        }
+       
       timeCount++;  
     }
 ////////////////////////////////////////////////////////////////////////////
