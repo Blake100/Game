@@ -1,5 +1,7 @@
 package game;
 
+import Entities.Mob;
+
 public class Player {
     private int numTurns;
     private int maxTurns = 16;

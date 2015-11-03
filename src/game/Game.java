@@ -4,6 +4,7 @@
  */
 package game;
 
+import Entities.Mob;
 import GUI.SettingsMenu;
 import GUI.Menu;
 import static game.Game.WINDOW_BORDER;
@@ -39,7 +40,7 @@ public class Game extends JFrame implements Runnable {
     static final int SOLID = 1;
     static final int EMPTY = 0;
     
-    static int numMobs = 3;
+    public static int numMobs = 3;
     Player playerOne, playerTwo;
 
     int currentRow;

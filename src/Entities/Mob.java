@@ -1,6 +1,8 @@
 
-package game;
+package Entities;
 
+import game.Game;
+import game.Player;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -14,7 +16,7 @@ public class Mob {
     private static final int UP = 0; 
     private static final int DOWN = 2; 
     
-    Mob(Color color){
+    public Mob(Color color){
         health = 2;
         Selected = false;
         dir=1;
