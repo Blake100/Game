@@ -542,11 +542,68 @@ public class Game extends JFrame implements Runnable {
         board[0][i]=SOLID;
         board[numColumns-1][i]= SOLID;
         }
-        for(int i = 0; i<numColumns;i++){
-        board[10][i]=SOLID;
+        
+        ////LEFT SIDE
+        for(int i = 0; i<numColumns-15;i++){
+        board[6][i]=SOLID;
         board[numColumns-1][i]= SOLID;
         }
+        for(int i = 0; i<numColumns-15;i++){
+        board[13][i]=SOLID;
+        board[numColumns-1][i]= SOLID;
+        }
+        for(int i = 0; i<numRows-12;i++){
+        board[i+6][5]=SOLID;
+        }
+        for(int i = 0; i<numRows-13;i++){
+        board[i][4]=SOLID;
+        board[i+13][4]=SOLID;
+        }
+        
+        
+        ////RIGHT SIDE
 
+        for(int i = 0; i<numRows-13;i++){
+        board[i][15]=SOLID;
+        board[i+13][15]=SOLID;
+        }
+        for(int i = 0; i<numRows-12;i++){
+        board[i+6][14]=SOLID;
+        }
+        for(int i = 0; i<numColumns-15;i++){
+        board[6][i+15]=SOLID;
+        board[numRows-7][i+15]= SOLID;
+        }
+        
+        ////MIDDLE HALL
+        for(int i = 0; i<numColumns-12;i++){
+        board[8][i+6]=SOLID;
+        board[numRows-9][i+6]= SOLID;
+        }
+        
+        //DOORS
+        board[17][4] = EMPTY;
+        board[17][16] = EMPTY;
+        board[2][4] = EMPTY;
+        board[2][16] = EMPTY;
+        
+        board[6][2] = EMPTY;
+        board[6][17] = EMPTY;
+        board[13][2] = EMPTY;
+        board[13][17] = EMPTY;
+        
+        board[17][15] = EMPTY;
+        board[2][15] = EMPTY;
+        
+        board[9][5] = EMPTY;
+        board[10][5] = EMPTY;
+        board[9][14] = EMPTY;
+        board[10][14] = EMPTY;
+        
+        board[8][7] = EMPTY;
+        board[8][8] = EMPTY;
+        board[11][11] = EMPTY;
+        board[11][12] = EMPTY;
         
         playerTwo.setNumTurns(0);
     }
