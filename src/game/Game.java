@@ -50,9 +50,11 @@ public class Game extends JFrame implements Runnable {
     int rowDir;
     
     boolean gameOver, playerOneTurn;
+    
     enum WinState{
         playerOne, playerTwo
     }
+    WinState Winstate;
     
     
     int timeCount;
@@ -358,6 +360,7 @@ public class Game extends JFrame implements Runnable {
                               if(playerOne.getNumTurns() >5)
                                 {
                                     playerOne.mobs[i].shoot(playerTwo);
+                                    playerOne.setNumTurns(playerOne.getNumTurns()-6);
                                 }
                           }
                         }
@@ -369,6 +372,7 @@ public class Game extends JFrame implements Runnable {
                               if(playerTwo.getNumTurns() >5)
                                 {
                                     playerTwo.mobs[i].shoot(playerOne);
+                                    playerTwo.setNumTurns(playerTwo.getNumTurns()-6);
                                 }
                           }
                         }
@@ -437,7 +441,7 @@ public class Game extends JFrame implements Runnable {
         }
 
                 
-               
+                 g.setFont(new Font("Impact",Font.PLAIN,20));
                  g.drawString("Player 1 Turns Left : " + playerOne.getNumTurns(), 32, 50);  
                  g.drawString("Player 2 Turns Left : " + playerTwo.getNumTurns(), 332, 50);  
                  
@@ -477,6 +481,18 @@ public class Game extends JFrame implements Runnable {
                         
                     }
                 }
+        if (Winstate == WinState.playerOne)
+        {
+            g.setColor(Color.BLUE);
+            g.setFont(new Font("Impact",Font.BOLD,60));
+            g.drawString("P1 WINS", 140, 350);
+        }
+        if (Winstate == WinState.playerTwo)
+        {
+            g.setColor(Color.BLUE);
+            g.setFont(new Font("Impact",Font.BOLD,60));
+            g.drawString("P2 WINS", 140, 350);
+        }
  
       gOld.drawImage(image, 0, 0, null);
     }
@@ -642,6 +658,28 @@ public class Game extends JFrame implements Runnable {
                 playerOne.mobs[i].setSelected(false);
              }
         }
+        
+        {
+            int numDead = 0;
+            for(int i = 0; i < numMobs;i++)
+            {
+                if(!playerOne.mobs[i].isVisible())
+                   numDead++;
+            }
+            if(numDead == numMobs)
+                Winstate = WinState.playerTwo;
+        }
+        {
+            int numDead = 0;
+            for(int i = 0; i < numMobs;i++)
+            {
+                if(!playerTwo.mobs[i].isVisible())
+                   numDead++;
+            }
+            if(numDead == numMobs)
+                Winstate = WinState.playerOne;
+        }
+        
         playerOne.tick();
         playerTwo.tick();
       timeCount++;  
