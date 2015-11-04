@@ -31,7 +31,8 @@ public class Game extends JFrame implements Runnable {
     Image WallY, WallX, Wall;
     
     boolean keepRollingDice;
-    boolean changeDice;
+    boolean rollDiceOver;
+    int changeDiceNumber;
     
     Graphics2D g;
     
@@ -111,7 +112,13 @@ public class Game extends JFrame implements Runnable {
                         {
                             playerTwo.mobs[i].setSelected(true);
                         }
-                    }    
+                    } 
+                    
+                    if(currentColumn == 19 && currentRow == 0)
+                    {
+                        keepRollingDice = false;
+                    }
+                    
                 }
                 if (e.BUTTON3 == e.getButton()) {
                      //right button
@@ -481,13 +488,99 @@ public class Game extends JFrame implements Runnable {
                         
                     }
                 }
+                 if(changeDiceNumber == 1)
+                 {
+                    drawDice(dice1side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                    ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
+                    if(playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                        playerOne.setNumTurns(2);
+                        rollDiceOver = true;
+                    }
+                    else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                         playerTwo.setNumTurns(2);
+                         rollDiceOver = true;
+                    }
+                 }
+                 else if(changeDiceNumber == 2)
+                 {
+                    drawDice(dice2side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                  ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
+                    if(playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                        playerOne.setNumTurns(4);
+                        rollDiceOver = true;
+                    }
+                    else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                         playerTwo.setNumTurns(4);
+                         rollDiceOver = true;
+                    }
+                 }
+                 else if(changeDiceNumber == 3)
+                 {
+                    drawDice(dice3side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                  ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
+                    if(playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                        playerOne.setNumTurns(6);
+                        rollDiceOver = true;
+                    }
+                    else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                         playerTwo.setNumTurns(6);
+                         rollDiceOver = true;
+                    }
+                 }
+                 else if(changeDiceNumber == 4)
+                 {
+                    drawDice(dice4side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                  ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
+                    if(playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                        playerOne.setNumTurns(8);
+                        rollDiceOver = true;
+                    }
+                    else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                         playerTwo.setNumTurns(8);
+                         rollDiceOver = true;
+                    }
+                 }
+                 else if(changeDiceNumber == 5)
+                 {
+                    drawDice(dice5side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                  ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
+                    if(playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                        playerOne.setNumTurns(10);
+                        rollDiceOver = true;
+                    }
+                    else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                         playerTwo.setNumTurns(10);
+                         rollDiceOver = true;
+                    }
+                         
+                 }
+                 else if(changeDiceNumber == 6)
+                 {
+                    drawDice(dice6side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                  ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
+                    changeDiceNumber = 1;
+                    if(playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                        playerOne.setNumTurns(12);
+                        rollDiceOver = true;
+                    }
+                    else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                         playerTwo.setNumTurns(12);
+                         rollDiceOver = true;
+                    }
+                 }
                  
-                 if(!changeDice)
-                 drawDice(dice1side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
-                 ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
-                 if(changeDice)
-                 drawDice(dice2side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
-                 ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
                  
                  
       gOld.drawImage(image, 0, 0, null);
@@ -538,25 +631,28 @@ public class Game extends JFrame implements Runnable {
     }
 /////////////////////////////////////////////////////////////////////////
     public void reset() {
+        changeDiceNumber = 1;
         board = new int[numColumns][numRows];
         playerOne = new Player();
         playerTwo = new Player();
         playerOneTurn = true;
         keepRollingDice = true;
-        changeDice = false;
+        rollDiceOver = false;
         timeCount = 0;
+        playerOne.setNumTurns(0);
+        playerTwo.setNumTurns(0);
        
 
         for(int i =0; i<numMobs;i++){
-        playerOne.mobs[i] = new Mob(Color.black);
-        playerTwo.mobs[i] = new Mob(Color.blue);
+            playerOne.mobs[i] = new Mob(Color.black);
+            playerTwo.mobs[i] = new Mob(Color.blue);
         }
        
         for(int i =0; i<numMobs;i++){
-        playerOne.mobs[i].setCurrColumn(6+(i*3));
-        playerTwo.mobs[i].setCurrColumn(6+(i*3));
-        playerOne.mobs[i].setCurrRow(1);
-        playerTwo.mobs[i].setCurrRow(numRows-2);
+            playerOne.mobs[i].setCurrColumn(6+(i*3));
+            playerTwo.mobs[i].setCurrColumn(6+(i*3));
+            playerOne.mobs[i].setCurrRow(1);
+            playerTwo.mobs[i].setCurrRow(numRows-2);
         }
         for(int i = 0; i<numRows;i++){
             for(int u = 0; u< numColumns;u++){
@@ -565,20 +661,19 @@ public class Game extends JFrame implements Runnable {
         }
         
         for(int i = 0; i<numRows;i++){
-        board[i][0]=SOLID;
-        board[i][numRows-1]= SOLID;
+            board[i][0]=SOLID;
+            board[i][numRows-1]= SOLID;
         }
         for(int i = 0; i<numColumns;i++){
-        board[0][i]=SOLID;
-        board[numColumns-1][i]= SOLID;
+            board[0][i]=SOLID;
+            board[numColumns-1][i]= SOLID;
         }
         for(int i = 0; i<numColumns;i++){
-        board[10][i]=SOLID;
-        board[numColumns-1][i]= SOLID;
+            board[10][i]=SOLID;
+            board[numColumns-1][i]= SOLID;
         }
 
         
-        playerTwo.setNumTurns(0);
     }
 /////////////////////////////////////////////////////////////////////////
     public void animate() {
@@ -589,7 +684,6 @@ public class Game extends JFrame implements Runnable {
                 xsize = getSize().width;
                 ysize = getSize().height;
             }
-            reset();
             character = Toolkit.getDefaultToolkit().getImage("./resources/char.png");
             Floor = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/Floor1.png");
             WallX = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/WallHorizontal.png");
@@ -602,34 +696,45 @@ public class Game extends JFrame implements Runnable {
             dice4side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/dicefourside.GIF");
             dice5side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/dicefiveside.GIF");
             dice6side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/dicesixside.GIF");
+            reset();
         }
         
-        if(playerOne.getNumTurns() <= 0 && playerOneTurn)
+        if(playerOneTurn)
         {
+            if(playerOne.getNumTurns() <= 0 && !keepRollingDice)
+            {
             playerOneTurn = false;
-            playerTwo.setNumTurns((int)(Math.random() * 16 +1));
+            keepRollingDice = true;
+            }
             for(int i = 0; i < numMobs;i++)
              {
                 playerTwo.mobs[i].setSelected(false);
              } 
         }
-        else if(playerTwo.getNumTurns() <= 0 && !playerOneTurn)
+        else if(!playerOneTurn)
         {
+            if(playerTwo.getNumTurns() <= 0 && !keepRollingDice)
+            {
             playerOneTurn = true;
-            playerOne.setNumTurns((int)(Math.random() * 16 +1));
+            keepRollingDice = true;
+            }
             for(int i = 0; i < numMobs;i++)
              {
                 playerOne.mobs[i].setSelected(false);
              }
         }
-        playerOne.tick();
-        playerTwo.tick();
-       
+        
         if(timeCount % 2 == 1)
         {
-            changeDice = true;
+            if(keepRollingDice)
+            {
+            changeDiceNumber = (int) (Math.random()*6+1);
+            rollDiceOver = false;
+            }
         }
-       
+        
+      playerOne.tick();
+      playerTwo.tick();
       timeCount++;  
     }
 ////////////////////////////////////////////////////////////////////////////

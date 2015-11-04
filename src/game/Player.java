@@ -9,7 +9,7 @@ public class Player {
     
     Player()
     {
-     numTurns = (int) (Math.random() * maxTurns + 1);    
+     numTurns = 0;    
     }
     public void tick(){
         for(int i = 0; i< mobs.length;i++)
