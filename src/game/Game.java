@@ -12,6 +12,11 @@ import java.io.*;
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.event.*;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.SourceDataLine;
 import javax.swing.*;
 
 public class Game extends JFrame implements Runnable {
@@ -26,7 +31,7 @@ public class Game extends JFrame implements Runnable {
     int ysize = -1;
     Image image;
     Image dice1side,dice2side,dice3side,dice4side,dice5side,dice6side;
-    Image character;
+    Image character, character2;
     Image Floor; 
     Image WallY, WallX, Wall;
     
@@ -35,6 +40,7 @@ public class Game extends JFrame implements Runnable {
     int changeDiceNumber;
     
     Graphics2D g;
+    sound bgSound = null;
     
     final int numRows = 20;
     final int numColumns = 20;
@@ -470,57 +476,56 @@ public class Game extends JFrame implements Runnable {
                     drawCharacter(character,(getX(0) + playerOne.mobs[i].getCurrColumn()*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
                                  , (getY(0)+ playerOne.mobs[i].getCurrRow()*getHeight2()/numRows) + (getHeight2()/numRows)/2,90*playerOneMobDir,1,1);
                     if(playerTwo.mobs[i].isVisible())
-                    drawCharacter(character,(getX(0) + playerTwo.mobs[i].getCurrColumn()*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                    drawCharacter(character2,(getX(0) + playerTwo.mobs[i].getCurrColumn()*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
                                  , (getY(0)+ playerTwo.mobs[i].getCurrRow()*getHeight2()/numRows) + (getHeight2()/numRows)/2,90*playerTwoMobDir,1,1);
                     
                      
                 }
                  
-                
-                 for(int i = 0; i<numRows;i++){
+                 
+                  for(int i = 0; i<numRows;i++){
                     for(int u = 0; u< numColumns;u++){
-                        if(board[i][u]==SOLID)
-                            drawTile(Wall,(getX(0)+u*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),(getY(0)+i*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5);
-//                            g.fillRect((getX(0)+u*getWidth2()/(numColumns)),
-//                                       (getY(0)+i*getHeight2()/(numRows)),
-//                                       getWidth2()/numColumns +1,
-//                                       getHeight2()/numRows);
+                        drawTile(WallX,(getX(0)+u*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),
+                                    (getY(0)+0*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5);
+                        drawTile(WallX,(getX(0)+u*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),
+                                    (getY(0)+19*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5);
+                        drawTile(WallY,(getX(0)+0*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),
+                                    (getY(0)+i*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5);
+                        drawTile(WallY,(getX(0)+19*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),
+                                    (getY(0)+i*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5);
                         
+                       drawTile(Wall,(getX(0)+0*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),
+                                    (getY(0)+0*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5); 
+                       drawTile(Wall,(getX(0)+19*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),
+                                    (getY(0)+19*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5); 
+                       drawTile(Wall,(getX(0)+0*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),
+                                    (getY(0)+19*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5); 
+                       drawTile(Wall,(getX(0)+19*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),
+                                    (getY(0)+0*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5); 
                     }
                 }
+               
+                 
+                 
+                 
                  if(changeDiceNumber == 1)
                  {
                     drawDice(dice1side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
                     ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
                     if(playerOneTurn && !keepRollingDice && !rollDiceOver)
                     {
-                        playerOne.setNumTurns(2);
+                        playerOne.setNumTurns(3);
                         rollDiceOver = true;
                     }
                     else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
                     {
-                         playerTwo.setNumTurns(2);
+                         playerTwo.setNumTurns(3);
                          rollDiceOver = true;
                     }
                  }
                  else if(changeDiceNumber == 2)
                  {
                     drawDice(dice2side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
-                  ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
-                    if(playerOneTurn && !keepRollingDice && !rollDiceOver)
-                    {
-                        playerOne.setNumTurns(4);
-                        rollDiceOver = true;
-                    }
-                    else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
-                    {
-                         playerTwo.setNumTurns(4);
-                         rollDiceOver = true;
-                    }
-                 }
-                 else if(changeDiceNumber == 3)
-                 {
-                    drawDice(dice3side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
                   ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
                     if(playerOneTurn && !keepRollingDice && !rollDiceOver)
                     {
@@ -533,18 +538,33 @@ public class Game extends JFrame implements Runnable {
                          rollDiceOver = true;
                     }
                  }
+                 else if(changeDiceNumber == 3)
+                 {
+                    drawDice(dice3side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                  ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
+                    if(playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                        playerOne.setNumTurns(9);
+                        rollDiceOver = true;
+                    }
+                    else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                         playerTwo.setNumTurns(9);
+                         rollDiceOver = true;
+                    }
+                 }
                  else if(changeDiceNumber == 4)
                  {
                     drawDice(dice4side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
                   ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
                     if(playerOneTurn && !keepRollingDice && !rollDiceOver)
                     {
-                        playerOne.setNumTurns(8);
+                        playerOne.setNumTurns(12);
                         rollDiceOver = true;
                     }
                     else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
                     {
-                         playerTwo.setNumTurns(8);
+                         playerTwo.setNumTurns(12);
                          rollDiceOver = true;
                     }
                  }
@@ -554,12 +574,12 @@ public class Game extends JFrame implements Runnable {
                   ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
                     if(playerOneTurn && !keepRollingDice && !rollDiceOver)
                     {
-                        playerOne.setNumTurns(10);
+                        playerOne.setNumTurns(15);
                         rollDiceOver = true;
                     }
                     else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
                     {
-                         playerTwo.setNumTurns(10);
+                         playerTwo.setNumTurns(15);
                          rollDiceOver = true;
                     }
                          
@@ -571,12 +591,12 @@ public class Game extends JFrame implements Runnable {
                     changeDiceNumber = 1;
                     if(playerOneTurn && !keepRollingDice && !rollDiceOver)
                     {
-                        playerOne.setNumTurns(12);
+                        playerOne.setNumTurns(18);
                         rollDiceOver = true;
                     }
                     else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
                     {
-                         playerTwo.setNumTurns(12);
+                         playerTwo.setNumTurns(18);
                          rollDiceOver = true;
                     }
                  }
@@ -668,10 +688,6 @@ public class Game extends JFrame implements Runnable {
             board[0][i]=SOLID;
             board[numColumns-1][i]= SOLID;
         }
-        for(int i = 0; i<numColumns;i++){
-            board[10][i]=SOLID;
-            board[numColumns-1][i]= SOLID;
-        }
 
         
     }
@@ -685,6 +701,7 @@ public class Game extends JFrame implements Runnable {
                 ysize = getSize().height;
             }
             character = Toolkit.getDefaultToolkit().getImage("./resources/char.png");
+            character2 = Toolkit.getDefaultToolkit().getImage("./resources/char2.png");
             Floor = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/Floor1.png");
             WallX = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/WallHorizontal.png");
             WallY = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/WallVertical.png");
@@ -697,8 +714,12 @@ public class Game extends JFrame implements Runnable {
             dice5side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/dicefiveside.GIF");
             dice6side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/dicesixside.GIF");
             reset();
+           bgSound = new sound("./starwars.wav"); 
         }
-        
+       if(bgSound.donePlaying)
+       {
+           bgSound = new sound("./starwars.wav"); 
+       }
         if(playerOneTurn)
         {
             if(playerOne.getNumTurns() <= 0 && !keepRollingDice)
@@ -788,5 +809,45 @@ public class Game extends JFrame implements Runnable {
         return (ysize - 2 * YBORDER - WINDOW_BORDER - YTITLE);
     }
     
+}
+class sound implements Runnable {
+    Thread myThread;
+    File soundFile;
+    public boolean donePlaying = false;
+    sound(String _name)
+    {
+        soundFile = new File(_name);
+        myThread = new Thread(this);
+        myThread.start();
+    }
+    public void run()
+    {
+        try {
+        AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile);
+        AudioFormat format = ais.getFormat();
+    //    System.out.println("Format: " + format);
+        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+        SourceDataLine source = (SourceDataLine) AudioSystem.getLine(info);
+        source.open(format);
+        source.start();
+        int read = 0;
+        byte[] audioData = new byte[16384];
+        while (read > -1){
+            read = ais.read(audioData,0,audioData.length);
+            if (read >= 0) {
+                source.write(audioData,0,read);
+            }
+        }
+        donePlaying = true;
+
+        source.drain();
+        source.close();
+        }
+        catch (Exception exc) {
+            System.out.println("error: " + exc.getMessage());
+            exc.printStackTrace();
+        }
+    }
+
 }
 
