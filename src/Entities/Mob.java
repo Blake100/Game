@@ -11,10 +11,10 @@ public class Mob {
     private int health, dir;
     private int currRow,currColumn;
     private Color color;
-    private static final int RIGHT = 1; 
-    private static final int LEFT = 3; 
-    private static final int UP = 0; 
-    private static final int DOWN = 2; 
+    public static final int RIGHT = 1; 
+    public static final int LEFT = 3; 
+    public static final int UP = 0; 
+    public static final int DOWN = 2; 
     
     public Mob(Color color){
         health = 2;

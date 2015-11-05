@@ -4,20 +4,19 @@
  */
 package game;
 
+import Entities.Laser;
 import Entities.Mob;
 import GUI.SettingsMenu;
 import GUI.Menu;
 import static game.Game.WINDOW_BORDER;
-import java.io.*;
 import java.awt.*;
-import java.awt.geom.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 public class Game extends JFrame implements Runnable {
     static final int XBORDER = 20;
-    static final int YBORDER = 20;
-    static final int YTITLE = 30;
+    public static final int YBORDER = 20;
+    public static final int YTITLE = 30;
     static final int WINDOW_BORDER = 8;
     static final int WINDOW_WIDTH = 2*(WINDOW_BORDER + XBORDER) + (495 * 2);
     static final int WINDOW_HEIGHT = YTITLE + WINDOW_BORDER + 2 * YBORDER + (460 * 2);
@@ -29,11 +28,12 @@ public class Game extends JFrame implements Runnable {
     Image Floor; 
     Image WallY, WallX, Wall;
     
+    Laser laser;
     
     Graphics2D g;
     
-    final int numRows = 20;
-    final int numColumns = 20;
+    public static final int numRows = 20;
+    public static final int numColumns = 20;
 
     public static int board[][];
     public static final int MOB = 2;
@@ -51,6 +51,7 @@ public class Game extends JFrame implements Runnable {
     
     boolean gameOver, playerOneTurn;
     
+    
     enum WinState{
         playerOne, playerTwo
     }
@@ -60,9 +61,13 @@ public class Game extends JFrame implements Runnable {
     int timeCount;
     int timeSpeedVal;
     
+    
     public static Game frame1;
     public static Menu gui;
     public static SettingsMenu settings;
+    
+//    public int xdelta = getWidth2()/numColumns ,ydelta = getHeight2()/numRows;
+    
     public static void main(String[] args) {
         frame1 = new Game();
         frame1.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -88,8 +93,9 @@ public class Game extends JFrame implements Runnable {
                     int ypos = e.getY() - getY(0);
                     if (xpos < 0 || ypos < 0 || xpos > getWidth2() || ypos > getHeight2())
                         return;
-                    int ydelta = getHeight2()/numRows;
+                    
                     int xdelta = getWidth2()/numColumns;
+                    int ydelta = getHeight2()/numRows;
                     
                     currentColumn = xpos/xdelta;
                     currentRow = ypos/ydelta;
@@ -361,6 +367,10 @@ public class Game extends JFrame implements Runnable {
                                 {
                                     playerOne.mobs[i].shoot(playerTwo);
                                     playerOne.setNumTurns(playerOne.getNumTurns()-6);
+                                    laser = null;
+                                    laser = new Laser((getX(0) + playerOne.mobs[i].getCurrColumn()*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                                                       ,(getY(0)+ playerOne.mobs[i].getCurrRow()*getHeight2()/numRows) + (getHeight2()/numRows)/2,
+                                                             true, playerOne.mobs[i].getDir(),playerOne.mobs[i].getCurrColumn() ,playerOne.mobs[i].getCurrRow() );
                                 }
                           }
                         }
@@ -373,6 +383,10 @@ public class Game extends JFrame implements Runnable {
                                 {
                                     playerTwo.mobs[i].shoot(playerOne);
                                     playerTwo.setNumTurns(playerTwo.getNumTurns()-6);
+                                    laser = null;
+                                    laser = new Laser((getX(0) + playerTwo.mobs[i].getCurrColumn()*getWidth2()/numColumns+ (getWidth2()/numColumns)/2 )
+                                                       ,(getY(0)+ playerTwo.mobs[i].getCurrRow()*getHeight2()/numRows) + (getHeight2()/numRows)/2,
+                                                             true, playerTwo.mobs[i].getDir(), playerTwo.mobs[i].getCurrColumn() ,playerTwo.mobs[i].getCurrRow() );
                                 }
                           }
                         }
@@ -481,6 +495,11 @@ public class Game extends JFrame implements Runnable {
                         
                     }
                 }
+                 if(laser.isVisible())
+                 {
+                     laser.render(g);
+                 }
+                 
         if (Winstate == WinState.playerOne)
         {
             g.setColor(Color.BLUE);
@@ -531,8 +550,9 @@ public class Game extends JFrame implements Runnable {
         playerOne = new Player();
         playerTwo = new Player();
         playerOneTurn = true;
-       
 
+        laser = new Laser(0,0,false, 0, 0 ,0);
+        
         for(int i =0; i<numMobs;i++){
         playerOne.mobs[i] = new Mob(Color.black);
         playerTwo.mobs[i] = new Mob(Color.blue);
@@ -679,7 +699,8 @@ public class Game extends JFrame implements Runnable {
             if(numDead == numMobs)
                 Winstate = WinState.playerOne;
         }
-        
+
+        laser.tick();
         playerOne.tick();
         playerTwo.tick();
       timeCount++;  
