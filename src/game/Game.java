@@ -124,7 +124,11 @@ public class Game extends JFrame implements Runnable {
                         {
                             playerTwo.mobs[i].setSelected(true);
                         }
-                    }    
+                    } 
+                    if(currentColumn == 19 && currentRow == 0)
+                    {
+                        keepRollingDice = false;
+                    }
                 }
                 if (e.BUTTON3 == e.getButton()) {
                      //right button
