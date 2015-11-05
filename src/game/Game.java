@@ -28,7 +28,15 @@ public class Game extends JFrame implements Runnable {
     Image Floor; 
     Image WallY, WallX, Wall;
     
+    Image dice1side, dice2side,dice3side,dice4side,dice5side, dice6side;
+    
     Laser laser;
+    
+    
+        int changeDiceNumber = 1;
+        boolean keepRollingDice = true;
+        boolean rollDiceOver = false;
+        boolean okToSwitchPlayer = false;
     
     Graphics2D g;
     
@@ -499,7 +507,112 @@ public class Game extends JFrame implements Runnable {
                  {
                      laser.render(g);
                  }
+               
                  
+        // drawing the dice and testing to see whether it should stay on the image or keep looping through the others  
+                 if(changeDiceNumber == 1)
+                 {
+                    drawTile(dice1side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                    ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
+                    if(playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                        playerOne.setNumTurns(3);
+                        rollDiceOver = true;
+                        okToSwitchPlayer = true;
+                    }
+                    else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                         playerTwo.setNumTurns(3);
+                         rollDiceOver = true;
+                         okToSwitchPlayer = true;
+                    }
+                 }
+                 else if(changeDiceNumber == 2)
+                 {
+                    drawTile(dice2side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                  ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
+                    if(playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                        playerOne.setNumTurns(6);
+                        rollDiceOver = true;
+                        okToSwitchPlayer = true;
+                    }
+                    else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                         playerTwo.setNumTurns(6);
+                         rollDiceOver = true;
+                         okToSwitchPlayer = true;
+                    }
+                 }
+                 else if(changeDiceNumber == 3)
+                 {
+                    drawTile(dice3side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                  ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
+                    if(playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                        playerOne.setNumTurns(9);
+                        rollDiceOver = true;
+                        okToSwitchPlayer = true;
+                    }
+                    else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                         playerTwo.setNumTurns(9);
+                         rollDiceOver = true;
+                         okToSwitchPlayer = true;
+                    }
+                 }
+                 else if(changeDiceNumber == 4)
+                 {
+                    drawTile(dice4side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                  ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
+                    if(playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                        playerOne.setNumTurns(12);
+                        rollDiceOver = true;
+                        okToSwitchPlayer = true;
+                    }
+                    else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                         playerTwo.setNumTurns(12);
+                         rollDiceOver = true;
+                         okToSwitchPlayer = true;
+                    }
+                 }
+                 else if(changeDiceNumber == 5)
+                 {
+                    drawTile(dice5side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                  ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
+                    if(playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                        playerOne.setNumTurns(15);
+                        rollDiceOver = true;
+                        okToSwitchPlayer = true;
+                    }
+                    else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                         playerTwo.setNumTurns(15);
+                         rollDiceOver = true;
+                         okToSwitchPlayer = true;
+                    }
+                         
+                 }
+                 else if(changeDiceNumber == 6)
+                 {
+                    drawTile(dice6side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                  ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
+                    if(playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                        playerOne.setNumTurns(18);
+                        rollDiceOver = true;
+                        okToSwitchPlayer = true;
+                    }
+                    else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
+                    {
+                         playerTwo.setNumTurns(18);
+                         rollDiceOver = true;
+                         okToSwitchPlayer = true;
+                    }
+                 }         
         if (Winstate == WinState.playerOne)
         {
             g.setColor(Color.BLUE);
@@ -551,6 +664,11 @@ public class Game extends JFrame implements Runnable {
         playerTwo = new Player();
         playerOneTurn = true;
 
+        changeDiceNumber = 1;
+        keepRollingDice = true;
+        rollDiceOver = false;
+        okToSwitchPlayer = false;
+        
         laser = new Laser(0,0,false, 0, 0 ,0);
         
         for(int i =0; i<numMobs;i++){
@@ -652,52 +770,55 @@ public class Game extends JFrame implements Runnable {
                 xsize = getSize().width;
                 ysize = getSize().height;
             }
-            reset();
             character = Toolkit.getDefaultToolkit().getImage("./resources/char.png");
             Floor = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/Floor1.png");
             WallX = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/WallHorizontal.png");
             WallY = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/WallVertical.png");
             Wall = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/Wall.png");
+            
+            dice1side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/diceoneside.GIF");
+            dice2side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/dicetwoside.GIF");
+            dice3side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/dicethreeside.GIF");
+            dice4side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/dicefourside.GIF");
+            dice5side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/dicefiveside.GIF");
+            dice6side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/dicesixside.GIF");
+            reset();
+           
         }
-        
-        if(playerOne.getNumTurns() <= 0 && playerOneTurn)
+       
+        if(playerOneTurn)
         {
-            playerOneTurn = false;
-            playerTwo.setNumTurns((int)(Math.random() * 16 +1));
+            if(!keepRollingDice && playerOne.getNumTurns() <= 0 && okToSwitchPlayer)
+            {
+                keepRollingDice = true;
+                playerOneTurn = false;
+            }
             for(int i = 0; i < numMobs;i++)
              {
                 playerTwo.mobs[i].setSelected(false);
              } 
         }
-        else if(playerTwo.getNumTurns() <= 0 && !playerOneTurn)
+        else if(!playerOneTurn)
         {
-            playerOneTurn = true;
-            playerOne.setNumTurns((int)(Math.random() * 16 +1));
+            if(!keepRollingDice && playerTwo.getNumTurns() <= 0 && okToSwitchPlayer)
+            {
+                keepRollingDice = true;    
+                playerOneTurn = true;
+            }
             for(int i = 0; i < numMobs;i++)
              {
                 playerOne.mobs[i].setSelected(false);
              }
         }
-        
+        // every time it goes through it changes the face of the dice
+        if(timeCount % 2 == 1)
         {
-            int numDead = 0;
-            for(int i = 0; i < numMobs;i++)
+            if(keepRollingDice)
             {
-                if(!playerOne.mobs[i].isVisible())
-                   numDead++;
+                okToSwitchPlayer = false;
+                rollDiceOver = false;
+                changeDiceNumber = (int) (Math.random()*6+1);
             }
-            if(numDead == numMobs)
-                Winstate = WinState.playerTwo;
-        }
-        {
-            int numDead = 0;
-            for(int i = 0; i < numMobs;i++)
-            {
-                if(!playerTwo.mobs[i].isVisible())
-                   numDead++;
-            }
-            if(numDead == numMobs)
-                Winstate = WinState.playerOne;
         }
 
         laser.tick();
