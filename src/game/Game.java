@@ -34,9 +34,10 @@ public class Game extends JFrame implements Runnable {
     Image character, character2;
     Image Floor; 
     Image WallY, WallX, Wall;
-    
+    //having to do with the dice
     boolean keepRollingDice;
     boolean rollDiceOver;
+    boolean okToSwitchPlayer;
     int changeDiceNumber;
     
     Graphics2D g;
@@ -507,7 +508,7 @@ public class Game extends JFrame implements Runnable {
                
                  
                  
-                 
+               // drawing the dice and testing to see whether it should stay on the image or keep looping through the others  
                  if(changeDiceNumber == 1)
                  {
                     drawDice(dice1side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
@@ -516,11 +517,13 @@ public class Game extends JFrame implements Runnable {
                     {
                         playerOne.setNumTurns(3);
                         rollDiceOver = true;
+                        okToSwitchPlayer = true;
                     }
                     else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
                     {
                          playerTwo.setNumTurns(3);
                          rollDiceOver = true;
+                         okToSwitchPlayer = true;
                     }
                  }
                  else if(changeDiceNumber == 2)
@@ -531,11 +534,13 @@ public class Game extends JFrame implements Runnable {
                     {
                         playerOne.setNumTurns(6);
                         rollDiceOver = true;
+                        okToSwitchPlayer = true;
                     }
                     else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
                     {
                          playerTwo.setNumTurns(6);
                          rollDiceOver = true;
+                         okToSwitchPlayer = true;
                     }
                  }
                  else if(changeDiceNumber == 3)
@@ -546,11 +551,13 @@ public class Game extends JFrame implements Runnable {
                     {
                         playerOne.setNumTurns(9);
                         rollDiceOver = true;
+                        okToSwitchPlayer = true;
                     }
                     else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
                     {
                          playerTwo.setNumTurns(9);
                          rollDiceOver = true;
+                         okToSwitchPlayer = true;
                     }
                  }
                  else if(changeDiceNumber == 4)
@@ -561,11 +568,13 @@ public class Game extends JFrame implements Runnable {
                     {
                         playerOne.setNumTurns(12);
                         rollDiceOver = true;
+                        okToSwitchPlayer = true;
                     }
                     else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
                     {
                          playerTwo.setNumTurns(12);
                          rollDiceOver = true;
+                         okToSwitchPlayer = true;
                     }
                  }
                  else if(changeDiceNumber == 5)
@@ -576,11 +585,13 @@ public class Game extends JFrame implements Runnable {
                     {
                         playerOne.setNumTurns(15);
                         rollDiceOver = true;
+                        okToSwitchPlayer = true;
                     }
                     else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
                     {
                          playerTwo.setNumTurns(15);
                          rollDiceOver = true;
+                         okToSwitchPlayer = true;
                     }
                          
                  }
@@ -588,16 +599,17 @@ public class Game extends JFrame implements Runnable {
                  {
                     drawDice(dice6side,(getX(0) + 19*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
                   ,(getY(0)+ 0*getHeight2()/numRows) + (getHeight2()/numRows)/2,0,.5,.5);
-                    changeDiceNumber = 1;
                     if(playerOneTurn && !keepRollingDice && !rollDiceOver)
                     {
                         playerOne.setNumTurns(18);
                         rollDiceOver = true;
+                        okToSwitchPlayer = true;
                     }
                     else if(!playerOneTurn && !keepRollingDice && !rollDiceOver)
                     {
                          playerTwo.setNumTurns(18);
                          rollDiceOver = true;
+                         okToSwitchPlayer = true;
                     }
                  }
                  
@@ -651,17 +663,19 @@ public class Game extends JFrame implements Runnable {
     }
 /////////////////////////////////////////////////////////////////////////
     public void reset() {
-        changeDiceNumber = 1;
         board = new int[numColumns][numRows];
         playerOne = new Player();
         playerTwo = new Player();
         playerOneTurn = true;
-        keepRollingDice = true;
-        rollDiceOver = false;
         timeCount = 0;
         playerOne.setNumTurns(0);
         playerTwo.setNumTurns(0);
-       
+        //variables to do with the dice
+        changeDiceNumber = 1;
+        keepRollingDice = true;
+        rollDiceOver = false;
+        okToSwitchPlayer = false;
+        
 
         for(int i =0; i<numMobs;i++){
             playerOne.mobs[i] = new Mob(Color.black);
@@ -722,10 +736,10 @@ public class Game extends JFrame implements Runnable {
        }
         if(playerOneTurn)
         {
-            if(playerOne.getNumTurns() <= 0 && !keepRollingDice)
+            if(!keepRollingDice && playerOne.getNumTurns() <= 0 && okToSwitchPlayer)
             {
-            playerOneTurn = false;
-            keepRollingDice = true;
+                keepRollingDice = true;
+                playerOneTurn = false;
             }
             for(int i = 0; i < numMobs;i++)
              {
@@ -734,23 +748,24 @@ public class Game extends JFrame implements Runnable {
         }
         else if(!playerOneTurn)
         {
-            if(playerTwo.getNumTurns() <= 0 && !keepRollingDice)
+            if(!keepRollingDice && playerTwo.getNumTurns() <= 0 && okToSwitchPlayer)
             {
-            playerOneTurn = true;
-            keepRollingDice = true;
+                keepRollingDice = true;    
+                playerOneTurn = true;
             }
             for(int i = 0; i < numMobs;i++)
              {
                 playerOne.mobs[i].setSelected(false);
              }
         }
-        
+        // every time it goes through it changes the face of the dice
         if(timeCount % 2 == 1)
         {
             if(keepRollingDice)
             {
-            changeDiceNumber = (int) (Math.random()*6+1);
-            rollDiceOver = false;
+                okToSwitchPlayer = false;
+                rollDiceOver = false;
+                changeDiceNumber = (int) (Math.random()*6+1);
             }
         }
         
