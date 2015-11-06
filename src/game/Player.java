@@ -13,7 +13,10 @@ public class Player {
     }
     public void tick(){
         for(int i = 0; i< mobs.length;i++)
+        {
             mobs[i].tick();
+                    
+        }
     }
     public int getNumTurns()
     {

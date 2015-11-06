@@ -498,13 +498,32 @@ public class Game extends JFrame implements Runnable {
                  
                  for(int i = 0; i<numRows;i++){
                     for(int u = 0; u< numColumns;u++){
+                        boolean hasHorizontal = false;
+                        boolean hasVertical = false;
+                        
+                        if(i-1 >= 0 && board[i-1][u]==SOLID)
+                            hasHorizontal = true;
+                        if(i+1 <numRows && board[i+1][u]==SOLID)
+                            hasHorizontal = true;
+                        
+                        if(u-1 >= 0 && board[i][u-1]==SOLID)
+                            hasVertical = true;
+                        if(u+1 <numRows && board[i][u+1]==SOLID)
+                            hasVertical = true;
+                        
                         if(board[i][u]==SOLID)
+                        {
+                            if(hasHorizontal&&hasVertical)
                             drawTile(Wall,(getX(0)+u*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),(getY(0)+i*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5);
 //                            g.fillRect((getX(0)+u*getWidth2()/(numColumns)),
 //                                       (getY(0)+i*getHeight2()/(numRows)),
 //                                       getWidth2()/numColumns +1,
 //                                       getHeight2()/numRows);
-                        
+                            else if(hasHorizontal)
+                                drawTile(WallY,(getX(0)+u*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),(getY(0)+i*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5);
+                            else if(hasVertical)
+                                drawTile(WallX,(getX(0)+u*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),(getY(0)+i*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5);
+                        }
                     }
                 }
                  if(laser.isVisible())
@@ -667,6 +686,7 @@ public class Game extends JFrame implements Runnable {
         playerOne = new Player();
         playerTwo = new Player();
         playerOneTurn = true;
+        playerOne.setNumTurns(0);
 
         changeDiceNumber = 1;
         keepRollingDice = true;
@@ -676,8 +696,8 @@ public class Game extends JFrame implements Runnable {
         laser = new Laser(0,0,false, 0, 0 ,0);
         
         for(int i =0; i<numMobs;i++){
-        playerOne.mobs[i] = new Mob(Color.black);
-        playerTwo.mobs[i] = new Mob(Color.blue);
+        playerOne.mobs[i] = new Mob(Color.black,2);
+        playerTwo.mobs[i] = new Mob(Color.blue,0);
         }
        
         for(int i =0; i<numMobs;i++){
@@ -774,7 +794,7 @@ public class Game extends JFrame implements Runnable {
                 xsize = getSize().width;
                 ysize = getSize().height;
             }
-            character = Toolkit.getDefaultToolkit().getImage("./resources/char.png");
+            character = Toolkit.getDefaultToolkit().getImage("./resources/storm.png");
             Floor = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/Floor1.png");
             WallX = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/WallHorizontal.png");
             WallY = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/WallVertical.png");
@@ -789,7 +809,8 @@ public class Game extends JFrame implements Runnable {
             reset();
            
         }
-       
+        if(Winstate == null)
+        {
         if(playerOneTurn)
         {
             if(!keepRollingDice && playerOne.getNumTurns() <= 0 && okToSwitchPlayer)
@@ -824,11 +845,31 @@ public class Game extends JFrame implements Runnable {
                 changeDiceNumber = (int) (Math.random()*6+1);
             }
         }
-
+        {
+        boolean gameover = true;
+            for(int i = 0; i< numMobs;i++)
+            {
+                if(playerOne.mobs[i].isVisible())
+                    gameover = false;
+            }
+            if(gameover)
+                Winstate = WinState.playerTwo;
+        }
+        {
+        boolean gameover = true;
+            for(int i = 0; i< numMobs;i++)
+            {
+                if(playerTwo.mobs[i].isVisible())
+                    gameover = false;
+            }
+            if(gameover)
+                    Winstate = WinState.playerOne;
+        }
         laser.tick();
         playerOne.tick();
         playerTwo.tick();
-      timeCount++;  
+        timeCount++;  
+        }
     }
 ////////////////////////////////////////////////////////////////////////////
     public void drawTile(Image Tile, int xpos, int ypos, double rot, double xscale,double yscale)
