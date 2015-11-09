@@ -6,6 +6,8 @@ package game;
 
 import Entities.Laser;
 import Entities.Mob;
+import GUI.CharacterOneSelect;
+import GUI.CharacterTwoSelect;
 import GUI.SettingsMenu;
 import GUI.Menu;
 import static game.Game.WINDOW_BORDER;
@@ -24,7 +26,7 @@ public class Game extends JFrame implements Runnable {
     int xsize = -1;
     int ysize = -1;
     Image image;
-    Image character;
+    Image character, character2;
     Image Floor; 
     Image WallY, WallX, Wall;
     
@@ -32,6 +34,9 @@ public class Game extends JFrame implements Runnable {
     
     Graphics2D g;
     
+    // the gray immage is 0 and the blue image is 1
+    public static  int charonetype = 0;
+    public static  int chartwotype = 0;
     public static final int numRows = 20;
     public static final int numColumns = 20;
 
@@ -65,6 +70,8 @@ public class Game extends JFrame implements Runnable {
     public static Game frame1;
     public static Menu gui;
     public static SettingsMenu settings;
+    public static CharacterOneSelect charone;
+    public static CharacterTwoSelect chartwo;
     
 //    public int xdelta = getWidth2()/numColumns ,ydelta = getHeight2()/numRows;
     
@@ -73,6 +80,7 @@ public class Game extends JFrame implements Runnable {
         frame1.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame1.setVisible(false);
+        frame1.setResizable(false);
         
         gui = new Menu();
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -81,6 +89,16 @@ public class Game extends JFrame implements Runnable {
         settings = new SettingsMenu();
         settings.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         settings.setVisible(false);
+        
+        charone = new CharacterOneSelect();
+        charone.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        charone.setVisible(false);
+        charone.setResizable(false);
+        
+        chartwo = new CharacterTwoSelect();
+        chartwo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        chartwo.setVisible(false);
+        chartwo.setResizable(false);
     }
 
     public Game() {
@@ -370,7 +388,7 @@ public class Game extends JFrame implements Runnable {
                                     laser = null;
                                     laser = new Laser((getX(0) + playerOne.mobs[i].getCurrColumn()*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
                                                        ,(getY(0)+ playerOne.mobs[i].getCurrRow()*getHeight2()/numRows) + (getHeight2()/numRows)/2,
-                                                             true, playerOne.mobs[i].getDir(),playerOne.mobs[i].getCurrColumn() ,playerOne.mobs[i].getCurrRow() );
+                                                             true, playerOne.mobs[i].getDir(),playerOne.mobs[i].getCurrColumn() ,playerOne.mobs[i].getCurrRow());
                                 }
                           }
                         }
@@ -474,12 +492,24 @@ public class Game extends JFrame implements Runnable {
                 {
                     int playerOneMobDir = playerOne.mobs[i].getDir();
                     int playerTwoMobDir = playerTwo.mobs[i].getDir();
-                    if(playerOne.mobs[i].isVisible())
-                    drawCharacter(character,(getX(0) + playerOne.mobs[i].getCurrColumn()*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
-                                 , (getY(0)+ playerOne.mobs[i].getCurrRow()*getHeight2()/numRows) + (getHeight2()/numRows)/2,90*playerOneMobDir,1,1);
-                    if(playerTwo.mobs[i].isVisible())
-                    drawCharacter(character,(getX(0) + playerTwo.mobs[i].getCurrColumn()*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
-                                 , (getY(0)+ playerTwo.mobs[i].getCurrRow()*getHeight2()/numRows) + (getHeight2()/numRows)/2,90*playerTwoMobDir,1,1);
+                        if(playerOne.mobs[i].isVisible())
+                        {
+                            if(Game.charonetype == 0)
+                                drawCharacter(character,(getX(0) + playerOne.mobs[i].getCurrColumn()*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                                     , (getY(0)+ playerOne.mobs[i].getCurrRow()*getHeight2()/numRows) + (getHeight2()/numRows)/2,90*playerOneMobDir,1,1);
+                            else if(Game.charonetype == 1)
+                                drawCharacter(character2,(getX(0) + playerOne.mobs[i].getCurrColumn()*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                                     , (getY(0)+ playerOne.mobs[i].getCurrRow()*getHeight2()/numRows) + (getHeight2()/numRows)/2,90*playerOneMobDir,1,1);
+                        }
+                        if(playerTwo.mobs[i].isVisible())
+                        {
+                            if(Game.chartwotype == 0)
+                                drawCharacter(character,(getX(0) + playerTwo.mobs[i].getCurrColumn()*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                                     , (getY(0)+ playerTwo.mobs[i].getCurrRow()*getHeight2()/numRows) + (getHeight2()/numRows)/2,90*playerTwoMobDir,1,1);
+                            else if(Game.chartwotype == 1)
+                                drawCharacter(character2,(getX(0) + playerTwo.mobs[i].getCurrColumn()*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
+                                     , (getY(0)+ playerTwo.mobs[i].getCurrRow()*getHeight2()/numRows) + (getHeight2()/numRows)/2,90*playerTwoMobDir,1,1);
+                        }
                     
                      
                 }
@@ -642,6 +672,8 @@ public class Game extends JFrame implements Runnable {
         board[11][12] = EMPTY;
         
         playerTwo.setNumTurns(0);
+        
+      
     }
 /////////////////////////////////////////////////////////////////////////
     public void animate() {
@@ -654,12 +686,12 @@ public class Game extends JFrame implements Runnable {
             }
             reset();
             character = Toolkit.getDefaultToolkit().getImage("./resources/char.png");
+            character2 = Toolkit.getDefaultToolkit().getImage("./resources/chartwo.GIF");
             Floor = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/Floor1.png");
             WallX = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/WallHorizontal.png");
             WallY = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/WallVertical.png");
             Wall = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/Wall.png");
         }
-        
         if(playerOne.getNumTurns() <= 0 && playerOneTurn)
         {
             playerOneTurn = false;
