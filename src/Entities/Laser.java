@@ -76,9 +76,9 @@ public class Laser {
         if(yspeed<xspeed && yspeed !=0)
         currRow = ((ypos-150)/(game.Game.numRows)/2);
         if(yspeed>xspeed && xspeed !=0)
-        currCol = ((xpos-150)/(game.Game.numColumns)/2);
+        currCol = ((xpos-5)/(game.Game.numColumns)/2);
         if(yspeed<xspeed && xspeed !=0)
-        currCol = ((xpos-150)/(game.Game.numColumns)/2);
+        currCol = ((xpos-20)/(game.Game.numColumns)/2);
         
         //currCol = xpos/990;
         //currRow = (ypos)/(920);
