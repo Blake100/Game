@@ -1,5 +1,6 @@
 package Entities;
 
+import static game.Game.numRows;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -15,13 +16,13 @@ public class Laser {
         this.ypos = ypos;
         this.visible = visible;
         if(dir==Mob.UP)
-        this.yspeed = -10;
+        this.yspeed = -45;
         if(dir==Mob.DOWN)
-        this.yspeed = 10;
+        this.yspeed = 45;
         if(dir==Mob.RIGHT)
-        this.xspeed = 10;
+        this.xspeed = 45;
         if(dir==Mob.LEFT)
-        this.xspeed = -10;
+        this.xspeed = -45;
         
         currCol = col;
         currRow = row;
@@ -70,6 +71,14 @@ public class Laser {
         xpos+=xspeed;
         ypos+=yspeed;
         }
+        if(yspeed>xspeed && yspeed !=0)
+        currRow = ((ypos-75)/(game.Game.numRows)/2);
+        if(yspeed<xspeed && yspeed !=0)
+        currRow = ((ypos-150)/(game.Game.numRows)/2);
+        if(yspeed>xspeed && xspeed !=0)
+        currCol = ((xpos-150)/(game.Game.numColumns)/2);
+        if(yspeed<xspeed && xspeed !=0)
+        currCol = ((xpos-150)/(game.Game.numColumns)/2);
         
         //currCol = xpos/990;
         //currRow = (ypos)/(920);
@@ -82,8 +91,8 @@ public class Laser {
 //        currCol=0;
 //        if(currRow > game.Game.numRows -1)
 //        currRow = 0;
-//        if (visible && (game.Game.board[currRow][currCol] == game.Game.SOLID))
-//            visible = false;
+        if (visible && (game.Game.board[currRow][currCol] == game.Game.SOLID))
+            visible = false;
         System.out.println(currRow+"  "+currCol);
     }
     public void render(Graphics2D g)
