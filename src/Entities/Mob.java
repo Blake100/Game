@@ -23,12 +23,18 @@ public class Mob {
         visible = true;
         this.color = color;
     }
+    public Mob(Color color, int dir){
+        health = 2;
+        Selected = false;
+        this.dir=dir;
+        visible = true;
+        this.color = color;
+    }
 
     public void tick(){
         if(health<=0){
             visible = false;
-            currRow=0;
-            currColumn=0;
+            game.Game.board[currRow][currColumn] = game.Game.EMPTY;
         }
     }
     public boolean isSelected() {
