@@ -27,7 +27,7 @@ public class Game extends JFrame implements Runnable {
     int ysize = -1;
     Image image;
     Image character, character2;
-    Image Floor; 
+    Image Floor, darkness; 
     Image WallY, WallX, Wall;
     
     Image dice1side, dice2side,dice3side,dice4side,dice5side, dice6side;
@@ -49,6 +49,7 @@ public class Game extends JFrame implements Runnable {
     public static final int numColumns = 20;
 
     public static int board[][];
+    public static final int BOX = 3;
     public static final int MOB = 2;
     public static final int SOLID = 1;
     public static final int EMPTY = 0;
@@ -494,13 +495,25 @@ public class Game extends JFrame implements Runnable {
                  else
                  g.drawString("Player Two Turn", 532, 50);  
 
+                     for(int i = 0; i<numRows;i++){
+                    for(int u = 0; u< numColumns;u++){
+                        if(board[i][u]!=SOLID && board[i][u]!=MOB && board[i][u]!= BOX)
+                        {
+                           drawTile(darkness,(getX(0)+u*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),(getY(0)+i*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5); 
+                        }
+                    }
+                }
+                 
+                 
+                 
+                 
                  for(int i = 0; i<numRows;i++){
                     for(int u = 0; u< numColumns;u++){
                         drawTile(Floor,(getX(0)+u*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),(getY(0)+i*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5);
                     }
                 }
                  
-                 for(int i = 0; i < numMobs;i++)
+                for(int i = 0; i < numMobs;i++)
                 {
                     int playerOneMobDir = playerOne.mobs[i].getDir();
                     int playerTwoMobDir = playerTwo.mobs[i].getDir();
@@ -524,7 +537,7 @@ public class Game extends JFrame implements Runnable {
                         }
                     
                      
-                }
+                }    
                  
                  for(int i = 0; i<numRows;i++){
                     for(int u = 0; u< numColumns;u++){
@@ -554,13 +567,18 @@ public class Game extends JFrame implements Runnable {
                             else if(hasVertical)
                                 drawTile(WallX,(getX(0)+u*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),(getY(0)+i*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5);
                         }
+                        if(board[i][u]!=SOLID && board[i][u]!=MOB && board[i][u]!= BOX)
+                        {
+                           drawTile(darkness,(getX(0)+u*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),(getY(0)+i*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5); 
+                        }
                     }
                 }
+            
                  if(laser.isVisible())
                  {
                      laser.render(g);
                  }
-               
+                  
                  
         // drawing the dice and testing to see whether it should stay on the image or keep looping through the others  
                  if(changeDiceNumber == 1)
@@ -826,14 +844,14 @@ public class Game extends JFrame implements Runnable {
                 xsize = getSize().width;
                 ysize = getSize().height;
             }
-            reset();
-            character = Toolkit.getDefaultToolkit().getImage("./resources/char.png");
-            character2 = Toolkit.getDefaultToolkit().getImage("./resources/chartwo.GIF");
-            character = Toolkit.getDefaultToolkit().getImage("./resources/storm.png");
+            character = Toolkit.getDefaultToolkit().getImage("./resources/charone.png");
+            character2 = Toolkit.getDefaultToolkit().getImage("./resources/chartwo.png");
+          
             Floor = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/Floor1.png");
             WallX = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/WallHorizontal.png");
             WallY = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/WallVertical.png");
             Wall = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/Wall.png");
+            darkness = Toolkit.getDefaultToolkit().getImage("./resources/Tiles/darkness.GIF");
             
             dice1side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/diceoneside.GIF");
             dice2side = Toolkit.getDefaultToolkit().getImage("./resources/Dice/dicetwoside.GIF");
@@ -844,67 +862,125 @@ public class Game extends JFrame implements Runnable {
             reset();
            
         }
-      //  if(playerOne.getNumTurns() <= 0 && playerOneTurn)
         if(Winstate == null)
         {
-        if(playerOneTurn)
-        {
-            if(!keepRollingDice && playerOne.getNumTurns() <= 0 && okToSwitchPlayer)
+                for(int i =0; i<numMobs;i++){
+                   board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()]=MOB;
+                   board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()]=MOB;
+                  
+                       //PLAYER ONE
+                   
+                            if(board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()-1]!=SOLID)
+                            board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()-1]=BOX;
+                            
+                            if(board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()]!=SOLID)
+                            board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()]=BOX;
+                            
+                            if(board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()+1]!=SOLID)
+                            board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()+1]=BOX;
+                            
+                            if(board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()-1]!=SOLID)
+                            board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()-1]=BOX;
+                            
+                            if(board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()]!=SOLID)
+                            board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()]=BOX;
+                            
+                            if(board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()+1]!=SOLID)
+                            board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()+1]=BOX;
+                            
+                            if(board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()-1]!=SOLID)
+                            board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()-1]=BOX;
+                            
+                            if(board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()+1]!=SOLID)
+                            board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()+1]=BOX;  
+                            
+                      //PLAYER TWO
+                            if(board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()-1]!=SOLID)
+                            board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()-1]=BOX;
+                            
+                            if(board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()]!=SOLID)
+                            board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()]=BOX;
+                            
+                            if(board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()+1]!=SOLID)
+                            board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()+1]=BOX;
+                            
+                            if(board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()-1]!=SOLID)
+                            board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()-1]=BOX;
+                            
+                            if(board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()]!=SOLID)
+                            board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()]=BOX;
+                            
+                            if(board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()+1]!=SOLID)
+                            board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()+1]=BOX;
+                            
+                            if(board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()-1]!=SOLID)
+                            board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()-1]=BOX;
+                            
+                            if(board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()+1]!=SOLID)
+                            board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()+1]=BOX;  
+                            
+                    }
+                   
+                   
+                
+            if(playerOneTurn)
             {
-                keepRollingDice = true;
-                playerOneTurn = false;
+                if(!keepRollingDice && playerOne.getNumTurns() <= 0 && okToSwitchPlayer)
+                {
+                    keepRollingDice = true;
+                    playerOneTurn = false;
+                }
+                for(int i = 0; i < numMobs;i++)
+                 {
+                    playerTwo.mobs[i].setSelected(false);
+                 } 
             }
-            for(int i = 0; i < numMobs;i++)
-             {
-                playerTwo.mobs[i].setSelected(false);
-             } 
-        }
-        else if(!playerOneTurn)
-        {
-            if(!keepRollingDice && playerTwo.getNumTurns() <= 0 && okToSwitchPlayer)
+            else if(!playerOneTurn)
             {
-                keepRollingDice = true;    
-                playerOneTurn = true;
+                if(!keepRollingDice && playerTwo.getNumTurns() <= 0 && okToSwitchPlayer)
+                {
+                    keepRollingDice = true;    
+                    playerOneTurn = true;
+                }
+                for(int i = 0; i < numMobs;i++)
+                 {
+                    playerOne.mobs[i].setSelected(false);
+                 }
             }
-            for(int i = 0; i < numMobs;i++)
-             {
-                playerOne.mobs[i].setSelected(false);
-             }
-        }
-        // every time it goes through it changes the face of the dice
-        if(timeCount % 2 == 1)
-        {
-            if(keepRollingDice)
+            // every time it goes through it changes the face of the dice
+            if(timeCount % 2 == 1)
             {
-                okToSwitchPlayer = false;
-                rollDiceOver = false;
-                changeDiceNumber = (int) (Math.random()*6+1);
+                if(keepRollingDice)
+                {
+                    okToSwitchPlayer = false;
+                    rollDiceOver = false;
+                    changeDiceNumber = (int) (Math.random()*6+1);
+                }
             }
-        }
-        {
-        boolean gameover = true;
-            for(int i = 0; i< numMobs;i++)
             {
-                if(playerOne.mobs[i].isVisible())
-                    gameover = false;
+            boolean gameover = true;
+                for(int i = 0; i< numMobs;i++)
+                {
+                    if(playerOne.mobs[i].isVisible())
+                        gameover = false;
+                }
+                if(gameover)
+                    Winstate = WinState.playerTwo;
             }
-            if(gameover)
-                Winstate = WinState.playerTwo;
-        }
-        {
-        boolean gameover = true;
-            for(int i = 0; i< numMobs;i++)
             {
-                if(playerTwo.mobs[i].isVisible())
-                    gameover = false;
+            boolean gameover = true;
+                for(int i = 0; i< numMobs;i++)
+                {
+                    if(playerTwo.mobs[i].isVisible())
+                        gameover = false;
+                }
+                if(gameover)
+                        Winstate = WinState.playerOne;
             }
-            if(gameover)
-                    Winstate = WinState.playerOne;
-        }
-        laser.tick();
-        playerOne.tick();
-        playerTwo.tick();
-        timeCount++;  
+            laser.tick();
+            playerOne.tick();
+            playerTwo.tick();
+            timeCount++;  
         }
     }
 ////////////////////////////////////////////////////////////////////////////
