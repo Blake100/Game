@@ -125,8 +125,8 @@ public class Laser {
         //currRow = xpos/10;
         //currRow = xpos/10;
         if(visible){
-        xpos+=xspeed*10;
-        ypos+=yspeed*10;
+        xpos+=xspeed*30;
+        ypos+=yspeed*30;
         }
         
         if (visible && game.Game.board[currRow][currCol] == game.Game.SOLID)
