@@ -173,6 +173,8 @@ public class Game extends JFrame implements Runnable {
         addKeyListener(new KeyAdapter() {
 
             public void keyPressed(KeyEvent e) {
+                if(!laser.isVisible())
+                {
                 if (e.VK_D == e.getKeyCode())
                 {
                     if(playerOneTurn)
@@ -424,6 +426,7 @@ public class Game extends JFrame implements Runnable {
                 }
 
                 repaint();
+                }
             }
         });
         init();
@@ -741,7 +744,7 @@ public class Game extends JFrame implements Runnable {
         rollDiceOver = false;
         okToSwitchPlayer = false;
         
-        laser = new Laser(0,0,false, 0, 0 ,0);
+        laser = new Laser(55,55,false, 0, 0 ,0);
         
         for(int i =0; i<numMobs;i++){
         playerOne.mobs[i] = new Mob(Color.black,2);
@@ -977,6 +980,16 @@ public class Game extends JFrame implements Runnable {
                 if(gameover)
                         Winstate = WinState.playerOne;
             }
+            if(laser.getXSpeed() > 0 && board[laser.getYpos()/ (getHeight2()/numRows) -1][laser.getXpos() / (getWidth2()/numColumns)]==SOLID)
+                laser.setVisible(false);
+            else if(laser.getXSpeed() < 0 && board[laser.getYpos()/ (getHeight2()/numRows) -1][laser.getXpos() / (getWidth2()/numColumns)-1]==SOLID)
+                laser.setVisible(false);
+            else if(laser.getYSpeed() > 0 && board[laser.getYpos()/ (getHeight2()/numRows) ][laser.getXpos() / (getWidth2()/numColumns)-1]==SOLID)
+                laser.setVisible(false);
+            else if(laser.getYSpeed() < 0 && board[laser.getYpos()/ (getHeight2()/numRows)-1][laser.getXpos() / (getWidth2()/numColumns)-1]==SOLID)
+                laser.setVisible(false);
+
+            
             laser.tick();
             playerOne.tick();
             playerTwo.tick();

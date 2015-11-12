@@ -1,5 +1,9 @@
 package Entities;
 
+import static game.Game.SOLID;
+import static game.Game.board;
+import static game.Game.numColumns;
+import static game.Game.numRows;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -125,8 +129,8 @@ public class Laser {
         //currRow = xpos/10;
         //currRow = xpos/10;
         if(visible){
-        xpos+=xspeed*10;
-        ypos+=yspeed*10;
+        xpos+=xspeed*30;
+        ypos+=yspeed*30;
         }
         
         if (visible && game.Game.board[currRow][currCol] == game.Game.SOLID)
