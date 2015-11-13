@@ -49,7 +49,8 @@ public class Game extends JFrame implements Runnable {
     public static final int numColumns = 20;
 
     public static int board[][];
-    public static final int BOX = 3;
+    public static final int BOX2 = 4;
+    public static final int BOX1 = 3;
     public static final int MOB = 2;
     public static final int SOLID = 1;
     public static final int EMPTY = 0;
@@ -418,8 +419,8 @@ public class Game extends JFrame implements Runnable {
                                     playerTwo.setNumTurns(playerTwo.getNumTurns()-6);
                                     laser = null;
                                     laser = new Laser((getX(0) + playerTwo.mobs[i].getCurrColumn()*getWidth2()/numColumns+ (getWidth2()/numColumns)/2 )
-                                                       ,(getY(0)+ playerTwo.mobs[i].getCurrRow()*getHeight2()/numRows) + (getHeight2()/numRows)/2,
-                                                             true, playerTwo.mobs[i].getDir(), playerTwo.mobs[i].getCurrColumn() ,playerTwo.mobs[i].getCurrRow() );
+                                                      ,(getY(0)+ playerTwo.mobs[i].getCurrRow()*getHeight2()/numRows) + (getHeight2()/numRows)/2,
+                                                      true, playerTwo.mobs[i].getDir(), playerTwo.mobs[i].getCurrColumn() ,playerTwo.mobs[i].getCurrRow() );
                                 }
                           }
                         }
@@ -497,29 +498,34 @@ public class Game extends JFrame implements Runnable {
                  else
                  g.drawString("Player Two Turn", 532, 50);  
 
-                     for(int i = 0; i<numRows;i++){
+                 
+                 for(int i = 0; i<numRows;i++){
                     for(int u = 0; u< numColumns;u++){
-                        if(board[i][u]!=SOLID && board[i][u]!=MOB && board[i][u]!= BOX)
+                        drawTile(Floor,(getX(0)+u*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),(getY(0)+i*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5);
+                        
+                        if(board[i][u]!=SOLID && board[i][u]!=MOB && board[i][u]!= BOX1 
+                        || board[i][u]!=SOLID && board[i][u]!=MOB && board[i][u]!= BOX2)
                         {
                            drawTile(darkness,(getX(0)+u*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),(getY(0)+i*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5); 
                         }
                     }
                 }
-                 
-                 
-                 
-                 
-                 for(int i = 0; i<numRows;i++){
+                                      for(int i = 0; i<numRows;i++){
                     for(int u = 0; u< numColumns;u++){
+                        if((board[i][u] == BOX1 && playerOneTurn) ||  (board[i][u] == BOX2 && !playerOneTurn))
                         drawTile(Floor,(getX(0)+u*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),(getY(0)+i*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5);
                     }
                 }
+                
+                                      
+                  
                  
                 for(int i = 0; i < numMobs;i++)
                 {
                     int playerOneMobDir = playerOne.mobs[i].getDir();
                     int playerTwoMobDir = playerTwo.mobs[i].getDir();
-                        if(playerOne.mobs[i].isVisible())
+                        if((playerOne.mobs[i].isVisible() && playerOneTurn) ||  
+                         (!playerOneTurn && board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()] == BOX2 && playerOne.mobs[i].isVisible()))
                         {
                             if(Game.charonetype == 0)
                                 drawCharacter(character,(getX(0) + playerOne.mobs[i].getCurrColumn()*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
@@ -528,7 +534,8 @@ public class Game extends JFrame implements Runnable {
                                 drawCharacter(character2,(getX(0) + playerOne.mobs[i].getCurrColumn()*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
                                      , (getY(0)+ playerOne.mobs[i].getCurrRow()*getHeight2()/numRows) + (getHeight2()/numRows)/2,90*playerOneMobDir,1,1);
                         }
-                        if(playerTwo.mobs[i].isVisible())
+                       if((playerTwo.mobs[i].isVisible() && !playerOneTurn) ||  
+                         (playerOneTurn && board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()] == BOX1 && playerTwo.mobs[i].isVisible()))
                         {
                             if(Game.chartwotype == 0)
                                 drawCharacter(character,(getX(0) + playerTwo.mobs[i].getCurrColumn()*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
@@ -537,8 +544,6 @@ public class Game extends JFrame implements Runnable {
                                 drawCharacter(character2,(getX(0) + playerTwo.mobs[i].getCurrColumn()*getWidth2()/numColumns + (getWidth2()/numColumns)/2)
                                      , (getY(0)+ playerTwo.mobs[i].getCurrRow()*getHeight2()/numRows) + (getHeight2()/numRows)/2,90*playerTwoMobDir,1,1);
                         }
-                    
-                     
                 }    
                  
                  for(int i = 0; i<numRows;i++){
@@ -566,12 +571,9 @@ public class Game extends JFrame implements Runnable {
                             else if(hasVertical)
                                 drawTile(WallX,(getX(0)+u*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),(getY(0)+i*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5);
                         }
-                        if(board[i][u]!=SOLID && board[i][u]!=MOB && board[i][u]!= BOX)
-                        {
-                           drawTile(darkness,(getX(0)+u*getWidth2()/(numColumns))+ ((getWidth2()/numColumns)/2),(getY(0)+i*getHeight2()/(numRows)) + (getHeight2()/numRows)/2,0.0,1.6,1.5); 
-                        }
                     }
                 }
+
             
                  if(laser.isVisible())
                  {
@@ -682,7 +684,16 @@ public class Game extends JFrame implements Runnable {
                          rollDiceOver = true;
                          okToSwitchPlayer = true;
                     }
-                 }         
+                 }    
+                 
+                 
+                 
+                                        for(int i = 0; i<numRows;i++){
+                    for(int u = 0; u< numColumns;u++){
+                        if(board[i][u] == BOX1  && playerOne.getNumTurns() == 0  && rollDiceOver  || board[i][u] == BOX2 && playerTwo.getNumTurns() == 0 && rollDiceOver)
+                            board[i][u] = EMPTY;
+                    }
+                }
         if (Winstate == WinState.playerOne)
         {
             g.setColor(Color.BLUE);
@@ -865,44 +876,59 @@ public class Game extends JFrame implements Runnable {
         {
             for(int i = 0; i<numRows;i++){
                         for(int u = 0; u< numColumns;u++){
-                            if(board[i][u] == BOX)
+                            if(board[i][u] == BOX1 || board[i][u] == BOX2)
                             {
                                 board[i][u] = EMPTY;
                             }
                         }
                         }
+            
                 for(int i =0; i<numMobs;i++){
+                    if(playerOneTurn)
                    board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()]=MOB;
-                   board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()]=MOB;
-                  
-                       //PLAYER ONE
+                    else 
+                   board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()]=EMPTY;
                    
+                    if(!playerOneTurn)
+                   board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()]=MOB;
+                    else
+                   board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()]=EMPTY;
+                  
+                    
+                     if((playerTwo.mobs[i].isVisible() && !playerOneTurn) ||  
+                         (playerOneTurn && board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()] == BOX1 && playerTwo.mobs[i].isVisible()))
+                         board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()] = MOB;
+                    
+                    
+                       //PLAYER ONE
+                   if(playerOneTurn)
+                   {
                    if(playerOne.mobs[i].getDir() == 2)
                    {
                        
                         if(board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()-1]!= SOLID)
-                        board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()-1]=BOX;
+                        board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()-1]=BOX1;
                         if(board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()]!=SOLID)
-                        board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()]=BOX;
+                        board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()]=BOX1;
                         if(board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()+1]!=SOLID)
-                        board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()+1]=BOX;
+                        board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()+1]=BOX1;
                         boolean doit = true;
-                        for(int x = 1; x < 4; x++)
+                        for(int x = 1; x < 8; x++)
                         {
                             if(playerOne.mobs[i].getCurrRow()+x >numRows-1 || board[playerOne.mobs[i].getCurrRow()+x][playerOne.mobs[i].getCurrColumn()]==SOLID)
                                 doit = false;
                             if(doit)
                             {
                             if(board[playerOne.mobs[i].getCurrRow()+x][playerOne.mobs[i].getCurrColumn()-1]!=SOLID)
-                            board[playerOne.mobs[i].getCurrRow()+x][playerOne.mobs[i].getCurrColumn()-1]=BOX;
+                            board[playerOne.mobs[i].getCurrRow()+x][playerOne.mobs[i].getCurrColumn()-1]=BOX1;
 //                            if(board[playerOne.mobs[i].getCurrRow()+2][playerOne.mobs[i].getCurrColumn()-2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()+2][playerOne.mobs[i].getCurrColumn()-2]=BOX;
 //                            if(board[playerOne.mobs[i].getCurrRow()+3][playerOne.mobs[i].getCurrColumn()-2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()+3][playerOne.mobs[i].getCurrColumn()-2]=BOX;
                             if(board[playerOne.mobs[i].getCurrRow()+x][playerOne.mobs[i].getCurrColumn()]!=SOLID)
-                            board[playerOne.mobs[i].getCurrRow()+x][playerOne.mobs[i].getCurrColumn()]=BOX;
+                            board[playerOne.mobs[i].getCurrRow()+x][playerOne.mobs[i].getCurrColumn()]=BOX1;
                             if(board[playerOne.mobs[i].getCurrRow()+x][playerOne.mobs[i].getCurrColumn()+1]!=SOLID)
-                            board[playerOne.mobs[i].getCurrRow()+x][playerOne.mobs[i].getCurrColumn()+1]=BOX;
+                            board[playerOne.mobs[i].getCurrRow()+x][playerOne.mobs[i].getCurrColumn()+1]=BOX1;
                             }
 //                            if(board[playerOne.mobs[i].getCurrRow()+2][playerOne.mobs[i].getCurrColumn()+2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()+2][playerOne.mobs[i].getCurrColumn()+2]=BOX;
@@ -914,28 +940,28 @@ public class Game extends JFrame implements Runnable {
                    {
                        
                         if(board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()+1]!=SOLID)
-                        board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()+1]=BOX;
+                        board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()+1]=BOX1;
                         if(board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()+1]!=SOLID)
-                        board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()+1]=BOX;
+                        board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()+1]=BOX1;
                         if(board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()+1]!=SOLID)
-                        board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()+1]=BOX;
+                        board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()+1]=BOX1;
                         boolean doit = true;
-                         for(int x = 1; x < 4; x++)
+                         for(int x = 1; x < 8; x++)
                         {
                             if(playerOne.mobs[i].getCurrColumn()+x >numColumns-1 || board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()+x]==SOLID)
                                 doit = false;
                             if(doit)
                             {
                             if(board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()+x]!=SOLID)
-                            board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()+x]=BOX;
+                            board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()+x]=BOX1;
 //                            if(board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()+2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()+2]=BOX;
 //                            if(board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()+3]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()+3]=BOX;
                             if(board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()+x]!=SOLID)
-                            board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()+x]=BOX;
+                            board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()+x]=BOX1;
                             if(board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()+x]!=SOLID)
-                            board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()+x]=BOX;
+                            board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()+x]=BOX1;
                             }
 //                            if(board[playerOne.mobs[i].getCurrRow()+2][playerOne.mobs[i].getCurrColumn()+2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()+2][playerOne.mobs[i].getCurrColumn()+2]=BOX;
@@ -947,28 +973,28 @@ public class Game extends JFrame implements Runnable {
                    {
                     
                         if(board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()-1]!= SOLID)
-                        board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()-1]=BOX;
+                        board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()-1]=BOX1;
                         if(board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()]!=SOLID)
-                        board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()]=BOX;
+                        board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()]=BOX1;
                         if(board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()+1]!=SOLID)
-                        board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()+1]=BOX;
+                        board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()+1]=BOX1;
                         boolean doit = true;
-                        for(int x = 1; x < 4; x++)
+                        for(int x = 1; x < 8; x++)
                         {
                             if(playerOne.mobs[i].getCurrRow()-x <0 || board[playerOne.mobs[i].getCurrRow()-x][playerOne.mobs[i].getCurrColumn()]==SOLID)
                                 doit = false;
                             if(doit)
                             {
                             if(board[playerOne.mobs[i].getCurrRow()-x][playerOne.mobs[i].getCurrColumn()-1]!=SOLID)
-                            board[playerOne.mobs[i].getCurrRow()-x][playerOne.mobs[i].getCurrColumn()-1]=BOX;
+                            board[playerOne.mobs[i].getCurrRow()-x][playerOne.mobs[i].getCurrColumn()-1]=BOX1;
 //                            if(board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()-2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()-2]=BOX;
 //                            if(board[playerOne.mobs[i].getCurrRow()-3][playerOne.mobs[i].getCurrColumn()-2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()-3][playerOne.mobs[i].getCurrColumn()-2]=BOX;
                             if(board[playerOne.mobs[i].getCurrRow()-x][playerOne.mobs[i].getCurrColumn()]!=SOLID)
-                            board[playerOne.mobs[i].getCurrRow()-x][playerOne.mobs[i].getCurrColumn()]=BOX;
+                            board[playerOne.mobs[i].getCurrRow()-x][playerOne.mobs[i].getCurrColumn()]=BOX1;
                             if(board[playerOne.mobs[i].getCurrRow()-x][playerOne.mobs[i].getCurrColumn()+1]!=SOLID)
-                            board[playerOne.mobs[i].getCurrRow()-x][playerOne.mobs[i].getCurrColumn()+1]=BOX;
+                            board[playerOne.mobs[i].getCurrRow()-x][playerOne.mobs[i].getCurrColumn()+1]=BOX1;
                             }
 //                            if(board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()+2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()+2]=BOX;
@@ -979,29 +1005,29 @@ public class Game extends JFrame implements Runnable {
                    if(playerOne.mobs[i].getDir() == 3)
                    {
                     if(board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()-1]!=SOLID)
-                    board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()-1]=BOX;
+                    board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()-1]=BOX1;
                     if(board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()-1]!=SOLID)
-                    board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()-1]=BOX;
+                    board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()-1]=BOX1;
                     if(board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()-1]!=SOLID)
-                    board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()-1]=BOX;
+                    board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()-1]=BOX1;
                     
                     boolean doit = true;
-                     for(int x = 1; x < 4; x++)
+                     for(int x = 1; x < 8; x++)
                         {
                             if(playerOne.mobs[i].getCurrColumn()-x <0 || board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()-x]==SOLID)
                                 doit=false;;
                                 if(doit)
                                 {
                             if(board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()-x]!=SOLID && playerOne.mobs[i].getCurrRow()-1 < numRows-1)
-                            board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()-x]=BOX;
+                            board[playerOne.mobs[i].getCurrRow()-1][playerOne.mobs[i].getCurrColumn()-x]=BOX1;
 //                            if(board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()-2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()-2]=BOX;
 //                            if(board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()-3]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()-3]=BOX;
                             if(board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()-x]!=SOLID && playerOne.mobs[i].getCurrRow() < numRows-1)
-                            board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()-x]=BOX;
+                            board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()-x]=BOX1;
                             if(board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()-x]!=SOLID && playerOne.mobs[i].getCurrRow()+1 < numRows-1)
-                            board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()-x]=BOX;
+                            board[playerOne.mobs[i].getCurrRow()+1][playerOne.mobs[i].getCurrColumn()-x]=BOX1;
                                 }
 //                            if(board[playerOne.mobs[i].getCurrRow()+2][playerOne.mobs[i].getCurrColumn()-2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()+2][playerOne.mobs[i].getCurrColumn()-2]=BOX;
@@ -1009,38 +1035,41 @@ public class Game extends JFrame implements Runnable {
 //                            board[playerOne.mobs[i].getCurrRow()+2][playerOne.mobs[i].getCurrColumn()-3]=BOX;
                         }
                    }
+                   }
                           
                    
                    
                    
                    
                       //PLAYER TWO
+                   if(!playerOneTurn)
+                   {
                    if(playerTwo.mobs[i].getDir() == 2)
                    {
                        
                         if(board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()-1]!= SOLID)
-                        board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()-1]=BOX;
+                        board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()-1]=BOX2;
                         if(board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()]!=SOLID)
-                        board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()]=BOX;
+                        board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()]=BOX2;
                         if(board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()+1]!=SOLID)
-                        board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()+1]=BOX;
+                        board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()+1]=BOX2;
                         boolean doit = true;
-                        for(int x = 1; x < 4; x++)
+                        for(int x = 1; x < 8; x++)
                         {
                             if(playerTwo.mobs[i].getCurrRow()+x >numRows-1 || board[playerTwo.mobs[i].getCurrRow()+x][playerTwo.mobs[i].getCurrColumn()]==SOLID)
                                 doit = false;
                             if(doit)
                             {
                             if(board[playerTwo.mobs[i].getCurrRow()+x][playerTwo.mobs[i].getCurrColumn()-1]!=SOLID)
-                            board[playerTwo.mobs[i].getCurrRow()+x][playerTwo.mobs[i].getCurrColumn()-1]=BOX;
+                            board[playerTwo.mobs[i].getCurrRow()+x][playerTwo.mobs[i].getCurrColumn()-1]=BOX2;
 //                            if(board[playerOne.mobs[i].getCurrRow()+2][playerOne.mobs[i].getCurrColumn()-2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()+2][playerOne.mobs[i].getCurrColumn()-2]=BOX;
 //                            if(board[playerOne.mobs[i].getCurrRow()+3][playerOne.mobs[i].getCurrColumn()-2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()+3][playerOne.mobs[i].getCurrColumn()-2]=BOX;
                             if(board[playerTwo.mobs[i].getCurrRow()+x][playerTwo.mobs[i].getCurrColumn()]!=SOLID)
-                            board[playerTwo.mobs[i].getCurrRow()+x][playerTwo.mobs[i].getCurrColumn()]=BOX;
+                            board[playerTwo.mobs[i].getCurrRow()+x][playerTwo.mobs[i].getCurrColumn()]=BOX2;
                             if(board[playerTwo.mobs[i].getCurrRow()+x][playerTwo.mobs[i].getCurrColumn()+1]!=SOLID)
-                            board[playerTwo.mobs[i].getCurrRow()+x][playerTwo.mobs[i].getCurrColumn()+1]=BOX;
+                            board[playerTwo.mobs[i].getCurrRow()+x][playerTwo.mobs[i].getCurrColumn()+1]=BOX2;
                             }
 //                            if(board[playerOne.mobs[i].getCurrRow()+2][playerOne.mobs[i].getCurrColumn()+2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()+2][playerOne.mobs[i].getCurrColumn()+2]=BOX;
@@ -1052,28 +1081,28 @@ public class Game extends JFrame implements Runnable {
                    {
                        
                         if(board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()+1]!=SOLID)
-                        board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()+1]=BOX;
+                        board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()+1]=BOX2;
                         if(board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()+1]!=SOLID)
-                        board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()+1]=BOX;
+                        board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()+1]=BOX2;
                         if(board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()+1]!=SOLID)
-                        board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()+1]=BOX;
+                        board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()+1]=BOX2;
                         boolean doit = true;
-                         for(int x = 1; x < 4; x++)
+                         for(int x = 1; x < 8; x++)
                         {
                             if(playerTwo.mobs[i].getCurrColumn()+x >numColumns-1 || board[playerOne.mobs[i].getCurrRow()][playerOne.mobs[i].getCurrColumn()+x]==SOLID)
                                 doit = false;
                             if(doit)
                             {
                             if(board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()+x]!=SOLID)
-                            board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()+x]=BOX;
+                            board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()+x]=BOX2;
 //                            if(board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()+2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()+2]=BOX;
 //                            if(board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()+3]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()+3]=BOX;
                             if(board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()+x]!=SOLID)
-                            board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()+x]=BOX;
+                            board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()+x]=BOX2;
                             if(board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()+x]!=SOLID)
-                            board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()+x]=BOX;
+                            board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()+x]=BOX2;
                             }
 //                            if(board[playerOne.mobs[i].getCurrRow()+2][playerOne.mobs[i].getCurrColumn()+2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()+2][playerOne.mobs[i].getCurrColumn()+2]=BOX;
@@ -1085,28 +1114,28 @@ public class Game extends JFrame implements Runnable {
                    {
                     
                         if(board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()-1]!= SOLID)
-                        board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()-1]=BOX;
+                        board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()-1]=BOX2;
                         if(board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()]!=SOLID)
-                        board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()]=BOX;
+                        board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()]=BOX2;
                         if(board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()+1]!=SOLID)
-                        board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()+1]=BOX;
+                        board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()+1]=BOX2;
                         boolean doit = true;
-                        for(int x = 1; x < 4; x++)
+                        for(int x = 1; x < 8; x++)
                         {
                             if(playerTwo.mobs[i].getCurrRow()-x <0 || board[playerTwo.mobs[i].getCurrRow()-x][playerTwo.mobs[i].getCurrColumn()]==SOLID)
                                 doit = false;
                             if(doit)
                             {
                             if(board[playerTwo.mobs[i].getCurrRow()-x][playerTwo.mobs[i].getCurrColumn()-1]!=SOLID)
-                            board[playerTwo.mobs[i].getCurrRow()-x][playerTwo.mobs[i].getCurrColumn()-1]=BOX;
+                            board[playerTwo.mobs[i].getCurrRow()-x][playerTwo.mobs[i].getCurrColumn()-1]=BOX2;
 //                            if(board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()-2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()-2]=BOX;
 //                            if(board[playerOne.mobs[i].getCurrRow()-3][playerOne.mobs[i].getCurrColumn()-2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()-3][playerOne.mobs[i].getCurrColumn()-2]=BOX;
                             if(board[playerTwo.mobs[i].getCurrRow()-x][playerTwo.mobs[i].getCurrColumn()]!=SOLID)
-                            board[playerTwo.mobs[i].getCurrRow()-x][playerTwo.mobs[i].getCurrColumn()]=BOX;
+                            board[playerTwo.mobs[i].getCurrRow()-x][playerTwo.mobs[i].getCurrColumn()]=BOX2;
                             if(board[playerTwo.mobs[i].getCurrRow()-x][playerTwo.mobs[i].getCurrColumn()+1]!=SOLID)
-                            board[playerTwo.mobs[i].getCurrRow()-x][playerTwo.mobs[i].getCurrColumn()+1]=BOX;
+                            board[playerTwo.mobs[i].getCurrRow()-x][playerTwo.mobs[i].getCurrColumn()+1]=BOX2;
                             }
 //                            if(board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()+2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()+2]=BOX;
@@ -1117,29 +1146,29 @@ public class Game extends JFrame implements Runnable {
                    if(playerTwo.mobs[i].getDir() == 3)
                    {
                     if(board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()-1]!=SOLID)
-                    board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()-1]=BOX;
+                    board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()-1]=BOX2;
                     if(board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()-1]!=SOLID)
-                    board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()-1]=BOX;
+                    board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()-1]=BOX2;
                     if(board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()-1]!=SOLID)
-                    board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()-1]=BOX;
+                    board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()-1]=BOX2;
                     
                     boolean doit = true;
-                     for(int x = 1; x < 4; x++)
+                     for(int x = 1; x < 8; x++)
                         {
                             if(playerTwo.mobs[i].getCurrColumn()-x <0 || board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()-x]==SOLID)
                                 doit = false;
                             if(doit)
                             {
                             if(board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()-x]!=SOLID && playerTwo.mobs[i].getCurrRow()-1 < numRows-1)
-                            board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()-x]=BOX;
+                            board[playerTwo.mobs[i].getCurrRow()-1][playerTwo.mobs[i].getCurrColumn()-x]=BOX2;
 //                            if(board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()-2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()-2]=BOX;
 //                            if(board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()-3]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()-2][playerOne.mobs[i].getCurrColumn()-3]=BOX;
                             if(board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()-x]!=SOLID && playerTwo.mobs[i].getCurrRow() < numRows-1)
-                            board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()-x]=BOX;
+                            board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()-x]=BOX2;
                             if(board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()-x]!=SOLID && playerTwo.mobs[i].getCurrRow()+1 < numRows-1)
-                            board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()-x]=BOX;
+                            board[playerTwo.mobs[i].getCurrRow()+1][playerTwo.mobs[i].getCurrColumn()-x]=BOX2;
                             }
 //                            if(board[playerOne.mobs[i].getCurrRow()+2][playerOne.mobs[i].getCurrColumn()-2]!=SOLID)
 //                            board[playerOne.mobs[i].getCurrRow()+2][playerOne.mobs[i].getCurrColumn()-2]=BOX;
@@ -1149,6 +1178,7 @@ public class Game extends JFrame implements Runnable {
                    }
                             
                     }
+                }
                     
                    
                 
