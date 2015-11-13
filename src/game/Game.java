@@ -1223,13 +1223,13 @@ public class Game extends JFrame implements Runnable {
                         Winstate = WinState.playerOne;
             }
             
-            if(laser.getXSpeed() > 0 && board[laser.getYpos()/ (getHeight2()/numRows) -1][laser.getXpos() / (getWidth2()/numColumns)]==SOLID || board[laser.getYpos()/ (getHeight2()/numRows) -1][laser.getXpos() / (getWidth2()/numColumns)]!=BOX)
+            if(laser.getXSpeed() > 0 && board[laser.getYpos()/ (getHeight2()/numRows) -1][laser.getXpos() / (getWidth2()/numColumns)]==SOLID )
                 laser.setVisible(false);
-            else if(laser.getXSpeed() < 0 && board[laser.getYpos()/ (getHeight2()/numRows) -1][laser.getXpos() / (getWidth2()/numColumns)-1]==SOLID || board[laser.getYpos()/ (getHeight2()/numRows) -1][laser.getXpos() / (getWidth2()/numColumns)-1]!=BOX)
+            else if(laser.getXSpeed() < 0 && board[laser.getYpos()/ (getHeight2()/numRows) -1][laser.getXpos() / (getWidth2()/numColumns)-1]==SOLID )
                 laser.setVisible(false);
-            else if(laser.getYSpeed() > 0 && board[laser.getYpos()/ (getHeight2()/numRows) ][laser.getXpos() / (getWidth2()/numColumns)-1]==SOLID || board[laser.getYpos()/ (getHeight2()/numRows) ][laser.getXpos() / (getWidth2()/numColumns)-1]!=BOX)
+            else if(laser.getYSpeed() > 0 && board[laser.getYpos()/ (getHeight2()/numRows) ][laser.getXpos() / (getWidth2()/numColumns)-1]==SOLID )
                 laser.setVisible(false);
-            else if(laser.getYSpeed() < 0 && board[laser.getYpos()/ (getHeight2()/numRows)-1][laser.getXpos() / (getWidth2()/numColumns)-1]==SOLID || board[laser.getYpos()/ (getHeight2()/numRows)-1][laser.getXpos() / (getWidth2()/numColumns)-1]!=BOX)
+            else if(laser.getYSpeed() < 0 && board[laser.getYpos()/ (getHeight2()/numRows)-1][laser.getXpos() / (getWidth2()/numColumns)-1]==SOLID )
                 laser.setVisible(false);
             
             laser.tick();
