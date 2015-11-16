@@ -895,10 +895,6 @@ public class Game extends JFrame implements Runnable {
                    board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()]=EMPTY;
                   
                     
-                     if((playerTwo.mobs[i].isVisible() && !playerOneTurn) ||  
-                         (playerOneTurn && board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()] == BOX1 && playerTwo.mobs[i].isVisible()))
-                         board[playerTwo.mobs[i].getCurrRow()][playerTwo.mobs[i].getCurrColumn()] = MOB;
-                    
                     
                        //PLAYER ONE
                    if(playerOneTurn)
